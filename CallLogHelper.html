@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="main.css">
+    <title>Call Log Helper</title>
+    <script src="https://unpkg.com/vue"></script>
+</head>
+
+<body>
+    <div id="app">
+
+        <div class="container">
+            <div id="mainDiv" class="card">
+                <div class="header">
+                    <img class="TLH-logo" src="https://i.vimeocdn.com/portrait/16028080_300x300.webp" alt="TLH Logo">
+                    <h2>Call Log Creator</h2>
+                    <p>Check off the boxes while you're on the phone to create a detailed call log.</p>
+                    <textarea name="callLog" cols="40" rows="5" id="callLog"></textarea>
+                    <span onclick="copyText()" class="copyTextBtn">Copy to Clipboard</span>
+                    <span onclick="location.reload();" class="copyTextBtn" id="clearBtn">Clear</span>
+
+
+                    <!-- Add New Item -->
+                    <div class="menu-item">
+                        <h6>Add New Item</h6>
+                        <select name="sectionDropdown" id="sectionDropdown">
+                        </select>
+                        <input type="text" id="myInput" placeholder="Add Item..">
+                        <span onclick="newElement()" class="addBtn" id="addItemBtn">Add Item</span>
+
+                    </div>
+
+                    <!-- Add New Section -->
+                    <div class="menu-item">
+                        <h6>Add New Section</h6>
+                        <input type="text" id="myInput2" placeholder="Add Section..">
+                        <span onclick="newSection()" class="addBtn" id="addSectionBtn">Add Section</span>
+                    </div>
+
+                    <!-- Choose Preset -->
+                    <div class="menu-item">
+                        <h6>Choose Preset</h6>
+                        <select name="presetDropdown" id="presetDropdown">
+                            <option value="data">Tuition Planner</option>
+                            <option value="data2">Enrollment Counselor</option>
+                        </select>
+                        <span onclick="choosePreset()" class="addBtn" id="presetBtn">Load Preset</span>
+                    </div>
+
+                    <!-- Delete Section -->
+                    <div class="menu-item">
+                        <h6>Delete Section</h6>
+                        <select name="delSectionDropdown" id="delSectionDropdown">
+                        </select>
+                        <span onclick="delSection()" class="delBtn" id="delSectionBtn">Delete Section</span>
+                    </div>
+
+                    <!-- Settings -->
+                    <div class="menu-item">
+                        <h6>Settings</h6>
+                        <!-- Export -->
+                        <span class="addBtn export" onclick="exportJSON()">Export</span>
+
+                        <!-- Import -->
+                        <input id="file-input" type="file" name="name" />
+                        <span class="addBtn import" onclick="importJSON()">Import</span>
+
+                        <!-- Reset -->
+                        <span onclick="resetBtn()" class="delBtn" id="resetBtn">Reset to Default Settings</span>
+                    </div>
+
+
+                </div>
+
+                <div class="list-container" id="list-container">
+                    <div v-for="(value, section) in settingsData">
+                        <div class="list-header">{{value.name}}</div>
+                        <input class="logInput" placeholder="Add tagline..." :value="value.string" @input="settingsData[section].string = $event.target.value">
+                        <ul>
+                            <li v-for="item in value.items">{{ item }}
+                                <span class="close" @click="deleteItem()"><i class="material-icons">
+                                        close
+                                    </i></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                callLogString: "",
+                settingsData: {
+                    "section0": {
+                        "name": "Call Status",
+                        "string": "",
+                        "items": [
+                            "V2V",
+                            "LVM",
+                            "PUHU",
+                            "NIS",
+                            "V2V checking in",
+                            "LVM - need 18-19 FAFSA",
+                            "LVM - need financial plan",
+                            "LVM - checking in",
+                            "LVM - award offer now available",
+                            "VM full",
+                            "V2V called in, verified",
+                            "vm not set up",
+                            "LVM - needs to accept award",
+                            "LVM - needs to accept award by 1/3",
+                            "LVM - needs to make payment by 1/3",
+                            "LVM - checking in, need EC/MPN",
+                            "LVM - need FA docs"
+                        ]
+                    },
+                    "section1": {
+                        "name": "Identify Plan",
+                        "string": "Identified Plan: ",
+                        "items": [
+                            "FA",
+                            "OOP",
+                            "Payment Plan",
+                            "Military Benefits",
+                            "Private Loans",
+                            "Scholarships",
+                            "Tuition Reimbursement",
+                            "Tuition Assistance",
+                            "Third - Party"
+                        ]
+                    },
+                    "section2": {
+                        "name": "General",
+                        "string": "Reviewed: ",
+                        "items": [
+                            "FAFSA",
+                            "DRT",
+                            "Types of Loans",
+                            "Responsible Borrowing",
+                            "Tuition Cost",
+                            "Reviewed Scholarships",
+                            "Disbursement & Refunds",
+                            "SAP Policy",
+                            "Tuition Due Date",
+                            "TuP Role",
+                            "FA Process",
+                            "how to adjust award",
+                            "TCS",
+                            "Connect",
+                            "Grad PLUS loans",
+                            "Aggregate limit",
+                            "payment plans",
+                            "Defaulted loans",
+                            "Self-Service",
+                            "FA award amounts",
+                            "verification docs",
+                            "deferring previous loans",
+                            "using FA for textbooks",
+                            "HT vs FT",
+                            "Unsub Loans",
+                            "FA processing times",
+                            "Unsub/Sub loans",
+                            "how to make payments",
+                            "how to accept award",
+                            "Verification"
+                        ]
+                    },
+                    "section3": {
+                        "name": "Next Step",
+                        "string": "Next Step: ",
+                        "items": [
+                            "FAFSA",
+                            "Verification Docs",
+                            "Accept Award",
+                            "Entrance Counseling",
+                            "MPN",
+                            "waiting on ACP",
+                            "needs to add school code",
+                            "needs SAR",
+                            "view tuition statement",
+                            "PLUS loan docs",
+                            "needs DRT/TRT",
+                            "need FA docs",
+                            "FA docs in review",
+                            "setup payment plan",
+                            "COE",
+                            "make payment"
+                        ]
+                    },
+                    "section4": {
+                        "name": "Emails",
+                        "string": "Emails Needed: ",
+                        "items": [
+                            "Intro",
+                            "Payment Options",
+                            "School Resources & Policies",
+                            "FA Award Information",
+                            "External Scholarships",
+                            "Account set-up link",
+                            "General Connect Info",
+                            "UWA Afford",
+                            "KHEAA instructions"
+                        ]
+                    },
+                    "section5": {
+                        "name": "Completed",
+                        "string": "Completed: ",
+                        "items": [
+                            "TRT",
+                            "18-19 FAFSA",
+                            "accepted award",
+                            "EC/MPN"
+                        ]
+                    }
+                },
+            },
+            mounted: function () {
+                if (localStorage.getItem("data")) {
+                    this.settingsData = JSON.parse(localStorage.getItem("data"))
+                }
+            },
+            methods: {
+
+            }
+        })
+    </script>
+</body>
+
+</html>
