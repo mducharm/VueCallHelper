@@ -1,10 +1,13 @@
 <template>
   <div id="app">
-    <ul>
+
+    <!-- navbar -->
+    <ul v-show="false">
       <li @click="activePage = 1">Call Helper</li>
     </ul>
+
     <!-- <img alt="TLH logo" src="./assets/TLH.jpg"> -->
-    <CallHelper v-show="activePage === 1"/>
+    <CallHelper v-show="activePage === 1" :settingsData="settingsData"/>
   </div>
 </template>
 
@@ -15,11 +18,33 @@ import CallHelper from './components/CallHelper/CallHelper.vue'
 export default {
   name: 'app',
   components: {
-    HelloWorld, CallHelper,
+    HelloWorld, CallHelper
   },
   data() {
     return {
-      activePage: 1
+      activePage: 1,
+      settingsData: {
+        "Call Status": {
+          "V2V": {
+            count: 0,
+            checked: false
+          },
+          "LVM": {
+            count: 0,
+            checked: false
+          }
+        },
+        "General": {
+          "FAFSA": {
+            count: 0,
+            checked: false
+          },
+          "Potatoes": {
+            count: 0,
+            checked: false
+          }
+        }
+      }
     }
   }
 }
@@ -34,6 +59,7 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 } */
+
 
 ul {
   list-style-type: none;

@@ -3,23 +3,46 @@
     <Menu/>
 
     <div class="list-container" id="list-container">
-      <Options/>
+      <div v-for="(value, key) in settingsData" :key="key">
+        <OptionSection :sectionTitle="key" :optionItems="value"/>
+        <!-- {{key}}
+        {{value}}-->
+      </div>
+      <div class="list-header">
+        <div @click="showAddSectionModal = true">
+          Add Section
+          <i class="material-icons">add</i>
+        </div>
+        <Modal v-show="showAddSectionModal" @close="showAddSectionModal = false">
+          <template slot="header">Add New Section...</template>
+          <template slot="body">
+            <input type="text" placeholder="Add new section...">
+            <i class="material-icons">add</i>
+          </template>
+          <template slot="footer"></template>
+        </Modal>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import Menu from "./Menu.vue";
-import Options from "./Options.vue";
+import OptionSection from "./OptionSection.vue";
+import Modal from "./Modal.vue";
 
 export default {
   name: "CallHelper",
   components: {
     Menu,
-    Options
+    OptionSection,
+    Modal
   },
-  props: {
-      settingsData
+  props: ["settingsData"],
+  data() {
+    return {
+      showAddSectionModal: false
+    };
   }
 };
 </script>
@@ -154,25 +177,25 @@ textarea {
 }
 
 .list-container {
-    align-self: flex-start;
-    width: 65%;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+  align-self: flex-start;
+  width: 65%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
 .list-container div {
-    width: 100%;
+  width: 100%;
 }
 
 .list-header {
-    width: 100%;
-    padding: 12px 20px 12px 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: #eee;
-    border: 1px solid rgba(85, 85, 85, 0.342);
-    font-size: 18px;
+  width: 100%;
+  padding: 12px 20px 12px 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #eee;
+  border: 1px solid rgba(85, 85, 85, 0.342);
+  font-size: 18px;
 }
 
 .logInput {
