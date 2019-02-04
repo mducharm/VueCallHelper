@@ -1,10 +1,12 @@
 <template>
   <div id="mainDiv" class="card">
-    <Menu/>
+    <div class="sidebar">
+      <Menu class="menu-component"/>
+    </div>
 
     <div class="list-container" id="list-container">
-      <div v-for="(value, key) in settingsData" :key="key">
-        <OptionSection :sectionTitle="key" :optionItems="value"/>
+      <div v-for="section in settingsData" :key="section">
+        <OptionSection :sectionTitle="section.title" :optionItems="section.items"/>
         <!-- {{key}}
         {{value}}-->
       </div>
@@ -47,7 +49,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 #mainDiv {
   display: flex;
   flex-direction: row;
@@ -56,9 +58,17 @@ export default {
   align-items: center;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
+.sidebar {
+  width: 35%;
+}
 
-.TLH-logo {
-  height: 20vh;
+.menu-component {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  z-index: 10;
+  width: 100%;
+  height: 100vh;
 }
 
 .header {
@@ -97,24 +107,6 @@ select {
   font-size: 16px;
 }
 
-.addBtn {
-  padding: 10px;
-  margin-bottom: 30px;
-  border: 0.5px solid #555;
-  width: 100%;
-  /* background: #d9d9d9;
-    color: #555; */
-  background: rgba(0, 116, 0, 0.75);
-  color: rgb(255, 254, 254);
-  float: left;
-  text-align: center;
-  font-size: 16px;
-  cursor: pointer;
-  transition: 0.3s;
-  border-radius: 0;
-  white-space: nowrap;
-}
-
 /* #addSectionBtn, #addItemBtn {
     margin-bottom: 25px;
 } */
@@ -147,35 +139,6 @@ select {
   color: black;
 }
 
-textarea {
-  width: 100%;
-  height: 30vh;
-  padding: 12px 20px;
-  box-sizing: border-box;
-  border: 2px solid #ccc;
-  border-radius: 4px;
-  background: #f8f8f8;
-  resize: none;
-}
-
-.copyTextBtn {
-  padding: 10px;
-  margin-bottom: 5px;
-  background: #d9d9d9;
-  color: #555;
-  float: left;
-  width: 100%;
-  text-align: center;
-  font-size: 16px;
-  cursor: pointer;
-  transition: 0.3s;
-  border-radius: 0;
-}
-
-#clearBtn {
-  margin-bottom: 30px;
-}
-
 .list-container {
   align-self: flex-start;
   width: 65%;
@@ -206,68 +169,5 @@ textarea {
   padding: 10px;
   float: left;
   font-size: 16px;
-}
-
-#resetBtn {
-  /* margin-top: 10px; */
-  background: rgba(150, 0, 0, 0.75);
-  color: white;
-}
-
-#resetBtn:hover {
-  background: rgba(236, 91, 91, 0.6);
-  color: black;
-}
-
-#delSectionBtn {
-  margin-bottom: 50px;
-}
-
-#presetBtn {
-  margin-bottom: 30px;
-  border: 0.5px solid #555;
-  background: rgba(28, 94, 238, 0.75);
-  color: white;
-}
-
-#presetBtn:hover {
-  background: rgba(96, 145, 252, 0.6);
-  color: black;
-}
-
-.export {
-  width: 100%;
-  /* margin-top: 30px; */
-  margin-bottom: 20px;
-  border: 0.5px solid #555;
-  background: gray;
-  color: white;
-}
-
-.export:hover {
-  background: rgba(96, 145, 252, 0.6);
-  color: black;
-}
-
-.import {
-  width: 100%;
-  margin-top: 0;
-  border: 0.5px solid #555;
-  background: gray;
-  color: white;
-}
-
-.import:hover {
-  background: rgba(96, 145, 252, 0.6);
-  color: black;
-}
-
-#file-input {
-  width: 100%;
-  margin-top: 0;
-  border: 0.5px solid #555;
-  border-bottom: 0;
-  background: gray;
-  color: white;
 }
 </style>

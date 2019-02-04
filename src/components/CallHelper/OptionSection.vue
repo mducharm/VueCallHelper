@@ -4,7 +4,8 @@
       <i class="material-icons" @click="showAddItemModal = true">add</i>
       <i class="material-icons">clear</i>
       <h1 class="list-title">{{sectionTitle}}</h1>
-      <i class="material-icons" @click="showDeleteSectionModal = true">delete</i>
+      <div></div>
+      <i class="material-icons deleteSection" @click="showDeleteSectionModal = true">delete</i>
     </div>
 
     <!-- Add Item -->
@@ -26,10 +27,15 @@
       </template>
     </Modal>
 
-    <ul v-for="item in optionItems" :key="item">
-      <li @click="$emit('item-clicked', item)">
-        {{item}}
-        {{optionItems[item]}}
+    <ul>
+      <li
+        v-for="item in optionItems"
+        :key="item"
+        @click="$emit('item-clicked', item)"
+      >
+        <p>{{item.name}}</p>
+        <p>Count: {{item.count}}</p>
+        <p>Checked: {{item.checked}}</p>
         <i class="material-icons" v-show="deleting">clear</i>
       </li>
     </ul>
@@ -55,20 +61,25 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .list-header {
   width: 100%;
   padding: 12px 20px 12px 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 10% 10% 50% 15% 15%;
   background: #eee;
   border: 1px solid rgba(85, 85, 85, 0.342);
+  border-radius: 10px;
   font-size: 18px;
 }
 
 .list-title {
   font-size: 18px;
+  text-align: center;
+}
+
+.deleteSection {
+  color: rgba(85, 85, 85, 0.7);
 }
 
 ul {
@@ -137,5 +148,23 @@ ul li.checked::before {
 .close:hover {
   background-color: #fff;
   color: white;
+}
+
+.addBtn {
+  padding: 10px;
+  margin-bottom: 30px;
+  border: 0.5px solid #555;
+  width: 100%;
+  /* background: #d9d9d9;
+    color: #555; */
+  background: rgba(0, 116, 0, 0.75);
+  color: rgb(255, 254, 254);
+  float: left;
+  text-align: center;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+  border-radius: 0;
+  white-space: nowrap;
 }
 </style>

@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-
     <!-- navbar -->
     <ul v-show="false">
       <li @click="activePage = 1">Call Helper</li>
@@ -12,42 +11,51 @@
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-import CallHelper from './components/CallHelper/CallHelper.vue'
+import HelloWorld from "./components/HelloWorld.vue";
+import CallHelper from "./components/CallHelper/CallHelper.vue";
 
 export default {
-  name: 'app',
+  name: "app",
   components: {
-    HelloWorld, CallHelper
+    HelloWorld,
+    CallHelper
   },
   data() {
     return {
       activePage: 1,
-      settingsData: {
-        "Call Status": {
-          "V2V": {
-            count: 0,
-            checked: false
-          },
-          "LVM": {
-            count: 0,
-            checked: false
-          }
+      settingsData: [
+        {
+          title: "call status",
+          string: "",
+          items: [
+            { name: "V2V", count: 0, checked: false },
+            { name: "LVM", count: 0, checked: false }
+          ]
         },
-        "General": {
-          "FAFSA": {
-            count: 0,
-            checked: false
-          },
-          "Potatoes": {
-            count: 0,
-            checked: false
-          }
-        }
-      }
-    }
+        {
+          title: "call status2",
+          string: "",
+          items: [
+            { name: "V2V", count: 0, checked: false },
+            { name: "LVM", count: 0, checked: false }
+          ]
+        },
+      ],
+    };
+  },
+  methods: {
+    createSection (name) {
+      this.settingsData.push({
+        title: name,
+        string: '',
+        items: []
+      })
+    },
+    // addOption(section, optionName) {
+    //   this.settingsData
+    // }
   }
-}
+};
 </script>
 
 <style scoped>
@@ -59,7 +67,6 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 } */
-
 
 ul {
   list-style-type: none;
