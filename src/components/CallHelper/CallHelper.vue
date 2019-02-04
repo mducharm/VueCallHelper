@@ -6,7 +6,7 @@
 
     <div class="list-container" id="list-container">
       <div v-for="section in settingsData" :key="section">
-        <OptionSection :sectionTitle="section.title" :optionItems="section.items"/>
+        <OptionSection :sectionTitle="section.title" :optionItems="section.items" @item-clicked="$emit('item-clicked', {title: section.title, item: $event.name})"/>
         <!-- {{key}}
         {{value}}-->
       </div>

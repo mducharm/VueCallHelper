@@ -6,7 +6,7 @@
     </ul>
 
     <!-- <img alt="TLH logo" src="./assets/TLH.jpg"> -->
-    <CallHelper v-show="activePage === 1" :settingsData="settingsData"/>
+    <CallHelper v-show="activePage === 1" :settingsData="settingsData" @item-clicked="updateOption($event.title, $event.item)"/>
   </div>
 </template>
 
@@ -23,7 +23,7 @@ export default {
   data() {
     return {
       activePage: 1,
-      settingsData: [
+      settingsData: [ // I probably need a better way to organize this. It's too complicated to make changes when they're in arrays
         {
           title: "call status",
           string: "",
@@ -51,9 +51,13 @@ export default {
         items: []
       })
     },
-    // addOption(section, optionName) {
-    //   this.settingsData
-    // }
+    updateOption(section, optionName) { 
+        var sectionSettings = this.settingsData.filter(obj => obj.title === section)[0];
+        var itemSettings = sectionSettings.items.filter(item => item.name === optionName)[0];
+        if (itemSettings.checked) {
+          
+        }
+    }
   }
 };
 </script>

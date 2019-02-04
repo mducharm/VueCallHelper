@@ -2,7 +2,7 @@
   <div>
     <div class="list-header">
       <i class="material-icons" @click="showAddItemModal = true">add</i>
-      <i class="material-icons">clear</i>
+      <i class="material-icons" @click="toggleDelete">clear</i>
       <h1 class="list-title">{{sectionTitle}}</h1>
       <div></div>
       <i class="material-icons deleteSection" @click="showDeleteSectionModal = true">delete</i>
@@ -29,13 +29,13 @@
 
     <ul>
       <li
-        v-for="item in optionItems"
+        v-for="item in sortOptions(optionItems)"
         :key="item"
         @click="$emit('item-clicked', item)"
       >
         <p>{{item.name}}</p>
-        <p>Count: {{item.count}}</p>
-        <p>Checked: {{item.checked}}</p>
+        <!-- <p>Count: {{item.count}}</p>
+        <p>Checked: {{item.checked}}</p> -->
         <i class="material-icons" v-show="deleting">clear</i>
       </li>
     </ul>
@@ -57,6 +57,22 @@ export default {
       showAddItemModal: false,
       showDeleteSectionModal: false
     };
+  },
+  methods: {
+    sortOptions (optionItems) { // may need to make this computed though? will have to test if this works after new items are added
+      return optionItems.sort(function (a,b) {
+        if (a.name.toUpperCase() < b.name.toUpperCase()) {
+          return -1
+        } else if (a.name.toUpperCase() > b.name.toUpperCase()) {
+          return 1
+        } else {
+          return 0;
+        }
+      })
+    },
+    toggleDelete () {
+      return (this.deleting) ? this.deleting = false : this.deleting = true;
+    }
   }
 };
 </script>
