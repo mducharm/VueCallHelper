@@ -29,11 +29,11 @@
 
     <ul>
       <li
-        v-for="(optionData, option) in sortOptions(optionItems)"
-        :key="option"
-        @click="handleOptionClick(option)"
+        v-for="optionData in sortOptions(optionItems)"
+        :key="optionData"
+        @click="handleOptionClick(optionData.option)"
       >
-        <p>{{option}}</p>
+        <p>{{optionData.option}}</p>
         <p>Count: {{optionData.count}}</p>
         <p>Checked: {{optionData.checked}}</p>
         <i class="material-icons" v-show="deleting">clear</i>
@@ -60,20 +60,31 @@ export default {
   },
   methods: {
     sortOptions (optionItems) { // may need to make this computed though? will have to test if this works after new items are added
-        var sortedOptions = {};
-        Object.keys(optionItems).sort().forEach(function(key) {
-          sortedOptions[key] = optionItems[key]
-        });
-        return sortedOptions;
+        // optionItems is an array of option objects with properties of option, count, & checked
+
+        return optionItems.sort(function (a,b) {
+          if (a.option.toUpperCase() > b.option.toUpperCase()) {
+            return 1;
+          } else if (a.option.toUpperCase() < b.option.toUpperCase()) {
+            return -1;
+          } else {
+            return 0;
+          }
+        })
+        // var sortedOptions = {};
+        // Object.keys(optionItems).sort().forEach(function(key) {
+        //   sortedOptions[key] = optionItems[key]
+        // });
+        // return sortedOptions;
     },
     toggleDelete () {
       return (this.deleting) ? this.deleting = false : this.deleting = true;
     },
     handleOptionClick(option) {
       if (this.deleting) {
-        this.$emit('delete-option', {section: this.sectionTitle, option: option})
+        this.$emit('delete-option', option)
       } else {
-        this.$emit('toggle-option', {section: this.sectionTitle, option: option})
+        this.$emit('toggle-option', option)
       }
     }
   }

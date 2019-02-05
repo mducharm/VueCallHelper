@@ -8,7 +8,7 @@
     <!-- <img alt="TLH logo" src="./assets/TLH.jpg"> -->
     <CallHelper
       v-show="activePage === 1"
-      :settingsData="settingsData"
+      :settingsData="settingsData2"
       @delete-option="deleteOption($event)"
       @toggle-option="toggleOption($event)"
     />
@@ -127,12 +127,12 @@ export default {
     },
     toggleOption(e) {
       console.log(e);
-      console.log(this.settingsData[e.section][e.option].checked);
-      if (this.settingsData[e.section][e.option].checked) {
-        this.settingsData[e.section][e.option].checked = false;
-      } else {
-        this.settingsData[e.section][e.option].checked = true;
-      }
+      // console.log(this.settingsData[e.section][e.option].checked);
+      // if (this.settingsData[e.section][e.option].checked) {
+      //   this.settingsData[e.section][e.option].checked = false;
+      // } else {
+      //   this.settingsData[e.section][e.option].checked = true;
+      // }
     },
     deleteOption(e) {}
   }

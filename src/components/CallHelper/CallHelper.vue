@@ -5,8 +5,13 @@
     </div>
 
     <div class="list-container" id="list-container">
-      <div v-for="(sectionData, section) in settingsData" :key="section">
-        <OptionSection :sectionTitle="section" :optionItems="sectionData" @delete-option="$emit('delete-option', $event)" @toggle-option="$emit('toggle-option', $event)"/>
+      <div v-for="sectionObj in settingsData" :key="sectionObj">
+        <OptionSection
+          :sectionTitle="sectionObj.name"
+          :optionItems="sectionObj.options"
+          @delete-option="$emit('delete-option', {section: sectionObj.name, option: $event})"
+          @toggle-option="$emit('toggle-option', {section: sectionObj.name, option: $event})"
+        />
         <!-- {{key}}
         {{value}}-->
       </div>
