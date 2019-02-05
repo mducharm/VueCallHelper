@@ -6,7 +6,12 @@
     </ul>
 
     <!-- <img alt="TLH logo" src="./assets/TLH.jpg"> -->
-    <CallHelper v-show="activePage === 1" :settingsData="settingsData" @item-clicked="updateOption($event.title, $event.item)"/>
+    <CallHelper
+      v-show="activePage === 1"
+      :settingsData="settingsData"
+      @delete-option="deleteOption($event)"
+      @toggle-option="toggleOption($event)"
+    />
   </div>
 </template>
 
@@ -23,41 +28,113 @@ export default {
   data() {
     return {
       activePage: 1,
-      settingsData: [ // I probably need a better way to organize this. It's too complicated to make changes when they're in arrays
-        {
-          title: "call status",
+      textboxString: "",
+      settingsData: {
+        "Call Status": {
           string: "",
-          items: [
-            { name: "V2V", count: 0, checked: false },
-            { name: "LVM", count: 0, checked: false }
+          sections: {
+            V2V: {
+              count: 0,
+              checked: false
+            }
+          }
+        },
+        General: {
+          string: "",
+          sections: {
+            DRT: {
+              count: 0,
+              checked: false
+            },
+            Verification: {
+              count: 0,
+              checked: false
+            }
+          }
+        },
+        Emails: {
+          string: "",
+          sections: {
+            "Scholarship info": {
+              count: 0,
+              checked: false
+            },
+            "Payment Options": {
+              count: 0,
+              checked: false
+            }
+          }
+        }
+      },
+      settingsData2: [
+        {
+          name: "Call Status",
+          string: '',
+          options: [
+            {
+              option: 'V2V',
+              count: 0,
+              checked: false
+            },
+            {
+              option: 'Potato',
+              count: 0,
+              checked: false
+            },
           ]
         },
         {
-          title: "call status2",
-          string: "",
-          items: [
-            { name: "V2V", count: 0, checked: false },
-            { name: "LVM", count: 0, checked: false }
+          name: "General",
+          string: 'Reviewed: ',
+          options: [
+            {
+              option: 'DRT',
+              count: 0,
+              checked: false
+            },
+            {
+              option: 'FAFSA',
+              count: 0,
+              checked: false
+            },
           ]
         },
-      ],
+
+      ]
     };
   },
+  computed: {
+    textbox() {
+      var string = "";
+
+      Object.keys(this.settingsData)
+        .filter(section => {
+          return this.settingsData[section].checked;
+        })
+        .forEach(function(section) {
+          // string += section.
+        });
+      return this.settingsData.map();
+    }
+  },
   methods: {
-    createSection (name) {
+    createSection(name) {
       this.settingsData.push({
         title: name,
-        string: '',
+        string: "",
         items: []
-      })
+      });
     },
-    updateOption(section, optionName) { 
-        var sectionSettings = this.settingsData.filter(obj => obj.title === section)[0];
-        var itemSettings = sectionSettings.items.filter(item => item.name === optionName)[0];
-        if (itemSettings.checked) {
-          
-        }
-    }
+    toggleOption(e) {
+      console.log(e);
+      console.log(this.settingsData[e.section][e.option].checked);
+      if (this.settingsData[e.section][e.option].checked) {
+        this.settingsData[e.section][e.option].checked = false;
+      } else {
+        this.settingsData[e.section][e.option].checked = true;
+      }
+    },
+    deleteOption(e) {}
   }
 };
 </script>
