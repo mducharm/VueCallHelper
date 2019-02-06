@@ -12,6 +12,8 @@
       :textbox="textbox"
       @delete-option="deleteOption($event)"
       @toggle-option="toggleOption($event)"
+      @update-string="updateSectionString($event)"
+      @clear-textbox="clearTextbox()"
     />
   </div>
 </template>
@@ -25,6 +27,11 @@ export default {
   components: {
     HelloWorld,
     CallHelper
+  },
+  mounted: function () {
+    if (localStorage.getItem("callHelperSettings")) {
+      this.settingsData = JSON.parse(localStorage.getItem("callHelperSettings"))
+    }
   },
   data() {
     return {
@@ -98,6 +105,17 @@ export default {
     }
   },
   methods: {
+    save() {
+      localStorage.setItem("callHelperSettings", JSON.stringify(this.settingsData))
+    },
+    updateSectionString(e) {
+      var sectionIndex = this.settingsData
+        .map(function(section) {
+          return section.name;
+        }).indexOf(e.section);
+        this.settingsData[sectionIndex].string = e.string;
+        this.save();
+    },
     createSection(name) {
       this.settingsData.push({
         title: name,
@@ -122,7 +140,14 @@ export default {
         this.settingsData[sectionIndex].options[optionIndex].checked = true;
       }
     },
-    deleteOption(e) {}
+    deleteOption(e) {},
+    clearTextbox() {
+        this.settingsData.forEach(function (sectionObject) {
+          sectionObject.options.forEach(function (optionObject) {
+            optionObject.checked = false;
+          });
+        });
+    },
   }
 };
 </script>

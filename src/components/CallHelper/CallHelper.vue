@@ -1,16 +1,18 @@
 <template>
   <div id="mainDiv" class="card">
     <div class="sidebar">
-      <Menu class="menu-component" :textbox="textbox"/>
+      <Menu class="menu-component" :textbox="textbox" @clear-textbox="$emit('clear-textbox')"/>
     </div>
 
     <div class="list-container" id="list-container">
       <div v-for="(sectionObj, index) in settingsData" :key="index">
         <OptionSection
           :sectionTitle="sectionObj.name"
+          :sectionString="sectionObj.string"
           :optionItems="sectionObj.options"
           @delete-option="$emit('delete-option', {section: sectionObj.name, option: $event})"
           @toggle-option="$emit('toggle-option', {section: sectionObj.name, option: $event})"
+          @update-string="$emit('update-string', {section: sectionObj.name, string: $event})"
         />
         <!-- {{key}}
         {{value}}-->

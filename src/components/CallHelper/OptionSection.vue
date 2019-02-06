@@ -8,6 +8,8 @@
       <i class="material-icons deleteSection" @click="showDeleteSectionModal = true">delete</i>
     </div>
 
+    <input placeholder="Add tagline here..." class="logInput" :value="sectionString" @keyup="$emit('update-string', $event.target.value)">
+
     <!-- Add Item -->
     <Modal v-show="showAddItemModal" @close="showAddItemModal = false">
       <template slot="header">Add to: {{sectionTitle}}</template>
@@ -35,9 +37,9 @@
         v-bind:class="{ checked: optionData.checked }"
       >
         <p>{{optionData.option}}</p>
-        <p>Count: {{optionData.count}}</p>
+        <!-- <p>Count: {{optionData.count}}</p>
         <p>Checked: {{optionData.checked}}</p>
-        <p>{{index}}</p>
+        <p>{{index}}</p> -->
         <i class="material-icons" v-show="deleting">clear</i>
       </li>
     </ul>
@@ -52,7 +54,7 @@ export default {
   components: {
     Modal
   },
-  props: ["sectionTitle", "optionItems"],
+  props: ["sectionTitle", "sectionString", "optionItems"],
   data() {
     return {
       deleting: false,
@@ -99,6 +101,23 @@ export default {
   border: 1px solid rgba(85, 85, 85, 0.342);
   border-radius: 10px;
   font-size: 18px;
+}
+
+.logInput {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  border: solid 0.5px rgb(197, 197, 197);
+  border-radius: 10px;
+  background-color: rgba(241, 241, 241, 0.5);
+  color: gray;
+  width: 100%;
+  padding: 10px;
+  float: left;
+  font-size: 16px;
+}
+
+.logInput:focus {
+  outline: none;
 }
 
 .list-title {

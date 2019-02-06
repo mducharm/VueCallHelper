@@ -19,7 +19,7 @@
     <textarea name="callLog" cols="40" rows="5" id="callLog" v-model="textbox"></textarea>
     <div class="icons-bar">
       <i class="material-icons menu-icon">file_copy</i>
-      <i class="material-icons menu-icon">settings_backup_restore</i>
+      <i class="material-icons menu-icon" @click="$emit('clear-textbox')">settings_backup_restore</i>
     </div>
     <!-- <span onclick="copyText()" class="copyTextBtn">Copy to Clipboard</span>
     <span onclick="location.reload();" class="copyTextBtn" id="clearBtn">Clear</span>-->
