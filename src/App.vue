@@ -8,7 +8,8 @@
     <!-- <img alt="TLH logo" src="./assets/TLH.jpg"> -->
     <CallHelper
       v-show="activePage === 1"
-      :settingsData="settingsData2"
+      :settingsData="settingsData"
+      :textbox="textbox"
       @delete-option="deleteOption($event)"
       @toggle-option="toggleOption($event)"
     />
@@ -29,92 +30,71 @@ export default {
     return {
       activePage: 1,
       textboxString: "",
-      settingsData: {
-        "Call Status": {
-          string: "",
-          sections: {
-            V2V: {
-              count: 0,
-              checked: false
-            }
-          }
-        },
-        General: {
-          string: "",
-          sections: {
-            DRT: {
-              count: 0,
-              checked: false
-            },
-            Verification: {
-              count: 0,
-              checked: false
-            }
-          }
-        },
-        Emails: {
-          string: "",
-          sections: {
-            "Scholarship info": {
-              count: 0,
-              checked: false
-            },
-            "Payment Options": {
-              count: 0,
-              checked: false
-            }
-          }
-        }
-      },
-      settingsData2: [
+      settingsData: [
         {
           name: "Call Status",
-          string: '',
+          string: "test",
           options: [
             {
-              option: 'V2V',
+              option: "V2V",
               count: 0,
               checked: false
             },
             {
-              option: 'Potato',
+              option: "Potato",
               count: 0,
               checked: false
-            },
+            }
           ]
         },
         {
           name: "General",
-          string: 'Reviewed: ',
+          string: "Reviewed: ",
           options: [
             {
-              option: 'DRT',
+              option: "DRT",
               count: 0,
               checked: false
             },
             {
-              option: 'FAFSA',
+              option: "zDRT",
               count: 0,
               checked: false
             },
+            {
+              option: "FAFSA",
+              count: 0,
+              checked: false
+            }
           ]
-        },
-
+        }
       ]
     };
   },
   computed: {
-    textbox() {
-      var string = "";
-
-      Object.keys(this.settingsData)
-        .filter(section => {
-          return this.settingsData[section].checked;
+    textbox: function() { // this is pretty gross, but it updates the textbox based on anything checked off
+      var checkedOptionsArr = this.settingsData.map(function (obj) {
+        var objVals = Object.values(obj);
+        var checkedOptVals = objVals[2].filter(function(optionObject) {
+          return (optionObject.checked);
         })
-        .forEach(function(section) {
-          // string += section.
-        });
-      return this.settingsData.map();
+        var arr = objVals;
+        arr[2] = checkedOptVals.map(function(x){ return x.option });
+        return arr;
+      })
+      var text = '';
+      checkedOptionsArr.forEach(function(arr) {
+        if (arr[2].length === 1) {
+          text += arr[1] + ' ' + arr[2][0] + '\n';
+        } else if (arr[2].length > 1) {
+          text += arr[1] + ' ' + arr[2].reduce(function(acc, x, idx, array) {
+            return (idx < array.length) ? acc + ', ' + x : acc + x;
+          });
+          
+          text += '\n';
+        }
+      })
+      return text;
     }
   },
   methods: {
@@ -126,13 +106,21 @@ export default {
       });
     },
     toggleOption(e) {
-      console.log(e);
-      // console.log(this.settingsData[e.section][e.option].checked);
-      // if (this.settingsData[e.section][e.option].checked) {
-      //   this.settingsData[e.section][e.option].checked = false;
-      // } else {
-      //   this.settingsData[e.section][e.option].checked = true;
-      // }
+      var sectionIndex = this.settingsData
+        .map(function(section) {
+          return section.name;
+        })
+        .indexOf(e.section);
+      var optionIndex = this.settingsData[sectionIndex].options
+        .map(function(o) {
+          return o.option;
+        })
+        .indexOf(e.option);
+      if (this.settingsData[sectionIndex].options[optionIndex].checked) {
+        this.settingsData[sectionIndex].options[optionIndex].checked = false;
+      } else {
+        this.settingsData[sectionIndex].options[optionIndex].checked = true;
+      }
     },
     deleteOption(e) {}
   }

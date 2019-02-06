@@ -16,7 +16,7 @@
       <i class="material-icons menu-icon" @click="showSettings = true">settings</i>
       <i class="material-icons menu-icon" @click="showAbout = true">help_outline</i>
     </div>
-    <textarea name="callLog" cols="40" rows="5" id="callLog"></textarea>
+    <textarea name="callLog" cols="40" rows="5" id="callLog" v-model="textbox"></textarea>
     <div class="icons-bar">
       <i class="material-icons menu-icon">file_copy</i>
       <i class="material-icons menu-icon">settings_backup_restore</i>
@@ -52,6 +52,7 @@ export default {
   components: {
     Modal
   },
+  props: ['textbox'],
   data() {
     return {
       showSettings: false,

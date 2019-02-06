@@ -1,11 +1,11 @@
 <template>
   <div id="mainDiv" class="card">
     <div class="sidebar">
-      <Menu class="menu-component"/>
+      <Menu class="menu-component" :textbox="textbox"/>
     </div>
 
     <div class="list-container" id="list-container">
-      <div v-for="sectionObj in settingsData" :key="sectionObj">
+      <div v-for="(sectionObj, index) in settingsData" :key="index">
         <OptionSection
           :sectionTitle="sectionObj.name"
           :optionItems="sectionObj.options"
@@ -45,7 +45,7 @@ export default {
     OptionSection,
     Modal
   },
-  props: ["settingsData"],
+  props: ["settingsData", 'textbox'],
   data() {
     return {
       showAddSectionModal: false
