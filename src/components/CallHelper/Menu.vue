@@ -18,11 +18,13 @@
     </div>
     <textarea name="callLog" ref="textbox" cols="40" rows="5" id="callLog" v-model="textbox"></textarea>
     <div class="icons-bar">
-      <div class="menu-icon" @click="handleCopyToClipboard()">
-        <i class="material-icons menu-icon-inner" >file_copy</i>
-        <div class="copy-tool-tip btn btn-dark" v-show="copyToolTip">Copied to Clipboard</div>
+      <div class="menu-icon-with-tooltip" @click="handleCopyToClipboard()">
+        <i class="material-icons menu-icon-inner">file_copy</i>
+        <transition name="copy-tool-tip-transition">
+          <div class="copy-tool-tip btn btn-dark" v-show="copyToolTip">Copied to Clipboard</div>
+        </transition>
       </div>
-      
+
       <i class="material-icons menu-icon" @click="$emit('clear-textbox')">settings_backup_restore</i>
     </div>
     <!-- <span onclick="copyText()" class="copyTextBtn">Copy to Clipboard</span>
@@ -119,12 +121,24 @@ export default {
   position: relative;
 }
 
-.menu-icon-inner {
-  font-size: 40px;
+.menu-icon-with-tooltip {
   margin: 5px;
   /* color: rgb(68, 68, 68); */
+  border: solid rgba(0, 0, 0, 0.5) 0.5px;
+  border-radius: 10px;
   padding: 10px;
   width: 50%;
+  position: relative;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.menu-icon-inner {
+  font-size: 40px;
+  margin: 0px;
+  padding: 0px;
 }
 
 .small-TLH-icon {
@@ -160,9 +174,18 @@ textarea {
 
 .copy-tool-tip {
   position: absolute;
-  top: -10px;
+  top: -50px;
   right: 0;
   left: 0;
+}
+
+.copy-tool-tip-transition-enter-active,
+.copy-tool-tip-transition-leave-active {
+  transition: opacity 0.5s;
+}
+
+.copy-tool-tip-transition-enter, .copy-tool-tip-transition-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 
 </style>
