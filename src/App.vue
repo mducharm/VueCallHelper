@@ -15,6 +15,7 @@
       @toggle-option="toggleOption($event)"
       @update-string="updateSectionString($event)"
       @clear-textbox="clearTextbox()"
+      @delete-section="deleteSection($event)"
     />
   </div>
 </template>
@@ -156,6 +157,20 @@ export default {
         items: []
       });
     },
+    deleteSection(e) {
+      // e === section name
+      var sectionIndex = this.settingsData
+        .map(function(section) {
+          return section.name;
+        })
+        .indexOf(e);
+      if (sectionIndex > -1) {
+        this.settingsData.splice(sectionIndex, 1);
+      }
+      console.log(sectionIndex)
+      console.log(this.settingsData)
+      this.save();
+    },
     toggleOption(e) {
       var sectionIndex = this.settingsData
         .map(function(section) {
@@ -192,10 +207,12 @@ export default {
           return section.name;
         })
         .indexOf(e.section);
-        var filteredOptions = this.settingsData[sectionIndex].options.filter(function(optionObject) {
+      var filteredOptions = this.settingsData[sectionIndex].options.filter(
+        function(optionObject) {
           return optionObject.option !== e.option;
-        });
-        this.settingsData[sectionIndex].options = filteredOptions;
+        }
+      );
+      this.settingsData[sectionIndex].options = filteredOptions;
       this.save();
     },
     clearTextbox() {

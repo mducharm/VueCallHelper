@@ -3,29 +3,29 @@
     <div class="modal-mask">
       <div class="modal-wrapper">
         <div class="modal-container">
-
           <div class="modal-header">
-            <slot name="header">
-              default header
-            </slot>
+            <slot name="header">default header</slot>
             <button class="modal-default-button btn" @click="$emit('close')">
-                <i class="material-icons">clear</i>
-              </button>
+              <i class="material-icons">clear</i>
+            </button>
           </div>
-
           <div class="modal-body">
-            <slot name="body">
-              default body
-            </slot>
+            <slot name="body"></slot>
+            <div v-show="modaltype === 'addItem'">
+              <input type="text" placeholder="Add...">
+              <i class="material-icons btn btn-success">add</i>
+            </div>
+
+            <div v-show="modaltype === 'deleteSection'">
+              <button class="btn btn-danger" @click="$emit('delete-section')">Delete</button>
+              <button class="btn btn-light" @click="$emit('close')">Cancel</button>
+            </div>
           </div>
 
           <div class="modal-footer">
             <slot name="footer">
-              <button class="modal-default-button btn" @click="$emit('close')">
-                Cancel
-              </button>
+              <button class="modal-default-button btn" @click="$emit('close')">Cancel</button>
             </slot>
-            
           </div>
         </div>
       </div>
@@ -36,10 +36,18 @@
 <script>
 export default {
   name: "Modal",
+  props: ["modaltype"],
+  data() {
+    return {
+      postAddMessage: ""
+    };
+  },
   methods: {
     close() {
+      this.postAddMessage = "";
       this.$emit("close");
-    }
+    },
+    addInput() {}
   }
 };
 </script>
@@ -52,9 +60,9 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, .5);
+  background-color: rgba(0, 0, 0, 0.5);
   display: table;
-  transition: opacity .3s ease;
+  transition: opacity 0.3s ease;
 }
 
 .modal-wrapper {
@@ -68,8 +76,8 @@ export default {
   padding: 20px 30px;
   background-color: #fff;
   border-radius: 2px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
-  transition: all .3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
+  transition: all 0.3s ease;
   font-family: Helvetica, Arial, sans-serif;
 }
 
@@ -114,17 +122,12 @@ export default {
 }
 
 input {
-  margin-top: 5px;
-  margin-bottom: 5px;
-  border: solid 0.5px rgb(197, 197, 197);
-  border-radius: 10px;
-  background-color: rgba(241, 241, 241, 0.5);
-  color: gray;
+  margin: 0;
+  border: none;
+  border-radius: 0;
   width: 100%;
   padding: 10px;
   float: left;
   font-size: 16px;
 }
-
-
 </style>

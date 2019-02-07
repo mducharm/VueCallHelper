@@ -14,23 +14,27 @@
           @toggle-option="$emit('toggle-option', {section: sectionObj.name, option: $event})"
           @update-string="$emit('update-string', {section: sectionObj.name, string: $event})"
           @add-option="$emit('add-option', {section: sectionObj.name, option: $event})"
+          @delete-section="$emit('delete-section', $event)"
         />
         <!-- {{key}}
         {{value}}-->
       </div>
+
       <div class="list-header">
         <div @click="showAddSectionModal = true">
           Add Section
           <i class="material-icons btn btn-success">add</i>
         </div>
+
         <Modal v-show="showAddSectionModal" @close="showAddSectionModal = false">
           <template slot="header">Add New Section...</template>
           <template slot="body">
-            <input type="text" placeholder="Add new section...">
-            <i class="material-icons btn btn-success">add</i>
+            <!-- <input type="text" placeholder="Add new section...">
+            <i class="material-icons btn btn-success">add</i> -->
           </template>
           <template slot="footer"></template>
         </Modal>
+
       </div>
     </div>
   </div>

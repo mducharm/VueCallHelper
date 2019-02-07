@@ -20,7 +20,7 @@
     >
 
     <!-- Add Item -->
-    <Modal v-show="showAddItemModal" @close="showAddItemModal = false">
+    <Modal v-show="showAddItemModal" @close="showAddItemModal = false" :modaltype="'addItem'">
       <template slot="header">Add to: {{sectionTitle}}</template>
       <template slot="body">
         <input
@@ -34,13 +34,10 @@
     </Modal>
 
     <!-- Delete Section -->
-    <Modal v-show="showDeleteSectionModal" @close="showDeleteSectionModal = false">
+    <Modal v-show="showDeleteSectionModal" @close="showDeleteSectionModal = false" @delete-section="$emit('delete-section', sectionTitle)" :modaltype="'deleteSection'">
       <template slot="header">Delete {{sectionTitle}} Section?</template>
       <template slot="body">
         <p>Are you sure you want to delete this section? It will be gone forever.</p>
-
-        <button class="btn btn-danger">Delete</button>
-        <button class="btn btn-light">Cancel</button>
       </template>
     </Modal>
 
