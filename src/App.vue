@@ -16,6 +16,7 @@
       @update-string="updateSectionString($event)"
       @clear-textbox="clearTextbox()"
       @delete-section="deleteSection($event)"
+      @copy-to-clipboard="copyToClipboard()"
     />
   </div>
 </template>
@@ -167,8 +168,8 @@ export default {
       if (sectionIndex > -1) {
         this.settingsData.splice(sectionIndex, 1);
       }
-      console.log(sectionIndex)
-      console.log(this.settingsData)
+      console.log(sectionIndex);
+      console.log(this.settingsData);
       this.save();
     },
     toggleOption(e) {
@@ -214,6 +215,22 @@ export default {
       );
       this.settingsData[sectionIndex].options = filteredOptions;
       this.save();
+    },
+    copyToClipboard() {
+      let codeToCopy = document.querySelector("#callLog");
+      codeToCopy.setAttribute("type", "text");
+      codeToCopy.select();
+
+      try {
+        var successful = document.execCommand("copy");
+        var msg = successful ? "successful" : "unsuccessful";
+      } catch (err) {
+        alert("Oops, unable to copy");
+      }
+
+      /* unselect the range */
+      codeToCopy.setAttribute("type", "hidden");
+      window.getSelection().removeAllRanges();
     },
     clearTextbox() {
       this.settingsData.forEach(function(sectionObject) {

@@ -107,7 +107,7 @@ export default {
 <style scoped>
 .list-header {
   width: 100%;
-  padding: 12px 20px 12px 40px;
+  padding: 5px 20px 5px 40px;
   /* display: grid;
   grid-template-columns: 10% 10% 50% 15% 15%; */
   display: flex;

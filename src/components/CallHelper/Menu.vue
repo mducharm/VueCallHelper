@@ -16,9 +16,13 @@
       <i class="material-icons menu-icon" @click="showSettings = true">settings</i>
       <i class="material-icons menu-icon" @click="showAbout = true">help_outline</i>
     </div>
-    <textarea name="callLog" cols="40" rows="5" id="callLog" v-model="textbox"></textarea>
+    <textarea name="callLog" ref="textbox" cols="40" rows="5" id="callLog" v-model="textbox"></textarea>
     <div class="icons-bar">
-      <i class="material-icons menu-icon">file_copy</i>
+      <div class="menu-icon" @click="handleCopyToClipboard()">
+        <i class="material-icons menu-icon-inner" >file_copy</i>
+        <div class="copy-tool-tip btn btn-dark" v-show="copyToolTip">Copied to Clipboard</div>
+      </div>
+      
       <i class="material-icons menu-icon" @click="$emit('clear-textbox')">settings_backup_restore</i>
     </div>
     <!-- <span onclick="copyText()" class="copyTextBtn">Copy to Clipboard</span>
@@ -52,18 +56,27 @@ export default {
   components: {
     Modal
   },
-  props: ['textbox'],
+  props: ["textbox"],
   data() {
     return {
+      copyToolTip: false,
       showSettings: false,
-      showAbout: false,
+      showAbout: false
     };
+  },
+  methods: {
+    handleCopyToClipboard() {
+      this.$emit("copy-to-clipboard");
+      this.copyToolTip = true;
+      setTimeout(() => {
+        this.copyToolTip = false;
+      }, 1000);
+    }
   }
 };
 </script>
 
 <style scoped>
-
 .menu-component {
   display: fixed;
   top: 0;
@@ -103,6 +116,15 @@ export default {
   border-radius: 10px;
   padding: 10px;
   width: 50%;
+  position: relative;
+}
+
+.menu-icon-inner {
+  font-size: 40px;
+  margin: 5px;
+  /* color: rgb(68, 68, 68); */
+  padding: 10px;
+  width: 50%;
 }
 
 .small-TLH-icon {
@@ -134,6 +156,13 @@ textarea {
   cursor: pointer;
   transition: 0.3s;
   border-radius: 0;
+}
+
+.copy-tool-tip {
+  position: absolute;
+  top: -10px;
+  right: 0;
+  left: 0;
 }
 
 </style>

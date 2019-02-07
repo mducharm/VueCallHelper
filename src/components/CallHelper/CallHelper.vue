@@ -1,7 +1,7 @@
 <template>
   <div id="mainDiv" class="card">
     <div class="sidebar">
-      <Menu class="menu-component" :textbox="textbox" @clear-textbox="$emit('clear-textbox')"/>
+      <Menu class="menu-component" :textbox="textbox" @clear-textbox="$emit('clear-textbox')" @copy-to-clipboard="$emit('copy-to-clipboard')"/>
     </div>
 
     <div class="list-container" id="list-container">
