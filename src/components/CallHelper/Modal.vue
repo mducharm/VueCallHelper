@@ -113,4 +113,18 @@ export default {
   transform: scale(1.1);
 }
 
+input {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  border: solid 0.5px rgb(197, 197, 197);
+  border-radius: 10px;
+  background-color: rgba(241, 241, 241, 0.5);
+  color: gray;
+  width: 100%;
+  padding: 10px;
+  float: left;
+  font-size: 16px;
+}
+
+
 </style>

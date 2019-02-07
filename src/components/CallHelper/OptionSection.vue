@@ -1,20 +1,35 @@
 <template>
   <div>
     <div class="list-header">
-      <i class="material-icons" @click="showAddItemModal = true">add</i>
-      <i class="material-icons" @click="toggleDelete">clear</i>
       <h1 class="list-title">{{sectionTitle}}</h1>
-      <div></div>
-      <i class="material-icons deleteSection" @click="showDeleteSectionModal = true">delete</i>
+      <div class="section-btns">
+        <i class="material-icons btn btn-success" @click="showAddItemModal = true">add</i>
+        <i class="material-icons btn btn-danger" @click="toggleDelete">clear</i>
+        <i
+          class="material-icons deleteSection btn btn-dark"
+          @click="showDeleteSectionModal = true"
+        >delete</i>
+      </div>
     </div>
 
-    <input placeholder="Add tagline here..." class="logInput" :value="sectionString" @keyup="$emit('update-string', $event.target.value)">
+    <input
+      placeholder="Add tagline here..."
+      class="logInput"
+      :value="sectionString"
+      @keyup="$emit('update-string', $event.target.value)"
+    >
 
     <!-- Add Item -->
     <Modal v-show="showAddItemModal" @close="showAddItemModal = false">
       <template slot="header">Add to: {{sectionTitle}}</template>
       <template slot="body">
-        <input placeholder="Add new item...">
+        <input
+          placeholder="Add new item..."
+          class="general-input"
+          style="width: 75%"
+          v-model="addItemInput"
+        >
+        <i class="material-icons btn btn-success" style="width: 25%" @click="addNewItem()">add</i>
       </template>
     </Modal>
 
@@ -34,13 +49,10 @@
         v-for="(optionData, index) in sortedOptions"
         :key="index"
         @click="handleOptionClick(optionData.option)"
-        v-bind:class="{ checked: optionData.checked }"
+        v-bind:class="{ checked: optionData.checked, deleting: deleting }"
       >
-        <p>{{optionData.option}}</p>
-        <!-- <p>Count: {{optionData.count}}</p>
-        <p>Checked: {{optionData.checked}}</p>
-        <p>{{index}}</p> -->
-        <i class="material-icons" v-show="deleting">clear</i>
+          <div>{{optionData.option}}</div>
+          <i class="material-icons" v-show="deleting">clear</i>
       </li>
     </ul>
   </div>
@@ -59,34 +71,38 @@ export default {
     return {
       deleting: false,
       showAddItemModal: false,
-      showDeleteSectionModal: false
+      showDeleteSectionModal: false,
+      addItemInput: ""
     };
   },
   methods: {
-    toggleDelete () {
-      return (this.deleting) ? this.deleting = false : this.deleting = true;
+    addNewItem() {
+      $emit("add-option", this.addItemInput);
+    },
+    toggleDelete() {
+      return this.deleting ? (this.deleting = false) : (this.deleting = true);
     },
     handleOptionClick(option) {
       if (this.deleting) {
-        this.$emit('delete-option', option)
+        this.$emit("delete-option", option);
       } else {
-        this.$emit('toggle-option', option)
+        this.$emit("toggle-option", option);
       }
     }
   },
   computed: {
-    sortedOptions: function () {
-        // optionItems is an array of option objects with properties of option, count, & checked
-        return this.optionItems.sort(function (a,b) {
-          if (a.option.toUpperCase() > b.option.toUpperCase()) {
-            return 1;
-          } else if (a.option.toUpperCase() < b.option.toUpperCase()) {
-            return -1;
-          } else {
-            return 0;
-          }
-        })
-    },
+    sortedOptions: function() {
+      // optionItems is an array of option objects with properties of option, count, & checked
+      return this.optionItems.sort(function(a, b) {
+        if (a.option.toUpperCase() > b.option.toUpperCase()) {
+          return 1;
+        } else if (a.option.toUpperCase() < b.option.toUpperCase()) {
+          return -1;
+        } else {
+          return 0;
+        }
+      });
+    }
   }
 };
 </script>
@@ -95,12 +111,20 @@ export default {
 .list-header {
   width: 100%;
   padding: 12px 20px 12px 40px;
-  display: grid;
-  grid-template-columns: 10% 10% 50% 15% 15%;
+  /* display: grid;
+  grid-template-columns: 10% 10% 50% 15% 15%; */
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: space-between;
   background: #eee;
   border: 1px solid rgba(85, 85, 85, 0.342);
   border-radius: 10px;
   font-size: 18px;
+}
+
+.section-btns i {
+  margin: 5px;
 }
 
 .logInput {
@@ -120,13 +144,19 @@ export default {
   outline: none;
 }
 
+.general-input {
+  margin: 0;
+  border: none;
+  border-radius: 0;
+  width: 100%;
+  padding: 10px;
+  float: left;
+  font-size: 16px;
+}
+
 .list-title {
   font-size: 18px;
   text-align: center;
-}
-
-.deleteSection {
-  color: rgba(85, 85, 85, 0.7);
 }
 
 ul {
@@ -143,11 +173,14 @@ ul {
 ul li {
   cursor: pointer;
   position: relative;
-  width: 30%;
-  flex-grow: 1;
-  padding: 12px 30px 12px 40px;
+  width: 20%;
+  /* flex-grow: 1; */
+
+  padding: 12px 30px 12px 30px;
   display: flex;
+  flex-flow: row nowrap;
   align-items: center;
+  justify-content: center;
   background: #eee;
   font-size: 18px;
   transition: 0.2s;
@@ -168,6 +201,11 @@ ul li:hover {
 
 ul li.checked {
   background: rgba(30, 184, 25, 0.87);
+  color: #fff;
+}
+
+ul li.deleting {
+  background: rgba(212, 43, 43, 0.664);
   color: #fff;
 }
 

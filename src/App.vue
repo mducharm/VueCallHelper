@@ -10,6 +10,7 @@
       v-show="activePage === 1"
       :settingsData="settingsData"
       :textbox="textbox"
+      @add-option="addOption($event)"
       @delete-option="deleteOption($event)"
       @toggle-option="toggleOption($event)"
       @update-string="updateSectionString($event)"
@@ -28,9 +29,11 @@ export default {
     HelloWorld,
     CallHelper
   },
-  mounted: function () {
+  mounted: function() {
     if (localStorage.getItem("callHelperSettings")) {
-      this.settingsData = JSON.parse(localStorage.getItem("callHelperSettings"))
+      this.settingsData = JSON.parse(
+        localStorage.getItem("callHelperSettings")
+      );
     }
   },
   data() {
@@ -49,6 +52,26 @@ export default {
             },
             {
               option: "Potato",
+              count: 0,
+              checked: false
+            },
+            {
+              option: "Potato2",
+              count: 0,
+              checked: false
+            },
+            {
+              option: "Potato3",
+              count: 0,
+              checked: false
+            },
+            {
+              option: "Potato4",
+              count: 0,
+              checked: false
+            },
+            {
+              option: "Potato5",
               count: 0,
               checked: false
             }
@@ -79,42 +102,52 @@ export default {
     };
   },
   computed: {
-    textbox: function() { // this is pretty gross, but it updates the textbox based on anything checked off
-      var checkedOptionsArr = this.settingsData.map(function (obj) {
+    textbox: function() {
+      // this is pretty gross, but it updates the textbox based on anything checked off
+      var checkedOptionsArr = this.settingsData.map(function(obj) {
         var objVals = Object.values(obj);
         var checkedOptVals = objVals[2].filter(function(optionObject) {
-          return (optionObject.checked);
-        })
+          return optionObject.checked;
+        });
         var arr = objVals;
-        arr[2] = checkedOptVals.map(function(x){ return x.option });
+        arr[2] = checkedOptVals.map(function(x) {
+          return x.option;
+        });
         return arr;
-      })
-      var text = '';
+      });
+      var text = "";
       checkedOptionsArr.forEach(function(arr) {
         if (arr[2].length === 1) {
-          text += arr[1] + ' ' + arr[2][0] + '\n';
+          text += arr[1] + " " + arr[2][0] + "\n";
         } else if (arr[2].length > 1) {
-          text += arr[1] + ' ' + arr[2].reduce(function(acc, x, idx, array) {
-            return (idx < array.length) ? acc + ', ' + x : acc + x;
-          });
-          
-          text += '\n';
+          text +=
+            arr[1] +
+            " " +
+            arr[2].reduce(function(acc, x, idx, array) {
+              return idx < array.length ? acc + ", " + x : acc + x;
+            });
+
+          text += "\n";
         }
-      })
+      });
       return text;
     }
   },
   methods: {
     save() {
-      localStorage.setItem("callHelperSettings", JSON.stringify(this.settingsData))
+      localStorage.setItem(
+        "callHelperSettings",
+        JSON.stringify(this.settingsData)
+      );
     },
     updateSectionString(e) {
       var sectionIndex = this.settingsData
         .map(function(section) {
           return section.name;
-        }).indexOf(e.section);
-        this.settingsData[sectionIndex].string = e.string;
-        this.save();
+        })
+        .indexOf(e.section);
+      this.settingsData[sectionIndex].string = e.string;
+      this.save();
     },
     createSection(name) {
       this.settingsData.push({
@@ -140,14 +173,38 @@ export default {
         this.settingsData[sectionIndex].options[optionIndex].checked = true;
       }
     },
-    deleteOption(e) {},
-    clearTextbox() {
-        this.settingsData.forEach(function (sectionObject) {
-          sectionObject.options.forEach(function (optionObject) {
-            optionObject.checked = false;
-          });
-        });
+    addOption(e) {
+      var sectionIndex = this.settingsData
+        .map(function(section) {
+          return section.name;
+        })
+        .indexOf(e.section);
+      this.settingsData[sectionIndex].options.push({
+        option: e.option,
+        count: 0,
+        checked: false
+      });
+      this.save();
     },
+    deleteOption(e) {
+      var sectionIndex = this.settingsData
+        .map(function(section) {
+          return section.name;
+        })
+        .indexOf(e.section);
+        var filteredOptions = this.settingsData[sectionIndex].options.filter(function(optionObject) {
+          return optionObject.option !== e.option;
+        });
+        this.settingsData[sectionIndex].options = filteredOptions;
+      this.save();
+    },
+    clearTextbox() {
+      this.settingsData.forEach(function(sectionObject) {
+        sectionObject.options.forEach(function(optionObject) {
+          optionObject.checked = false;
+        });
+      });
+    }
   }
 };
 </script>
