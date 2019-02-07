@@ -19,28 +19,6 @@
       @keyup="$emit('update-string', $event.target.value)"
     >
 
-    <!-- Add Item -->
-    <Modal v-show="showAddItemModal" @close="showAddItemModal = false" :modaltype="'addItem'">
-      <template slot="header">Add to: {{sectionTitle}}</template>
-      <template slot="body">
-        <input
-          placeholder="Add new item..."
-          class="general-input"
-          style="width: 75%"
-          v-model="addItemInput"
-        >
-        <i class="material-icons btn btn-success" style="width: 25%" @click="addNewItem()">add</i>
-      </template>
-    </Modal>
-
-    <!-- Delete Section -->
-    <Modal v-show="showDeleteSectionModal" @close="showDeleteSectionModal = false" @delete-section="$emit('delete-section', sectionTitle)" :modaltype="'deleteSection'">
-      <template slot="header">Delete {{sectionTitle}} Section?</template>
-      <template slot="body">
-        <p>Are you sure you want to delete this section? It will be gone forever.</p>
-      </template>
-    </Modal>
-
     <ul>
       <li
         v-for="(optionData, index) in sortedOptions"
@@ -48,10 +26,40 @@
         @click="handleOptionClick(optionData.option)"
         v-bind:class="{ checked: optionData.checked, deleting: deleting }"
       >
-          <div>{{optionData.option}}</div>
-          <i class="material-icons" v-show="deleting">clear</i>
+        <div>{{optionData.option}}</div>
+        <i class="material-icons" v-show="deleting">clear</i>
       </li>
     </ul>
+
+    <!-- Modals -->
+
+    <!-- Add Item -->
+    <Modal v-show="showAddItemModal" @close="showAddItemModal = false" :modaltype="'addItem'">
+      <template slot="header">Add to: {{sectionTitle}}</template>
+      <template slot="body">
+        Add an item to this section. Hit Enter to quickly add items.
+        <!-- <input
+          placeholder="Add new item..."
+          class="general-input"
+          style="width: 75%"
+          v-model="addItemInput"
+        >
+        <i class="material-icons btn btn-success" style="width: 25%" @click="addNewItem()">add</i> -->
+      </template>
+    </Modal>
+
+    <!-- Delete Section -->
+    <Modal
+      v-show="showDeleteSectionModal"
+      @close="showDeleteSectionModal = false"
+      @delete-section="$emit('delete-section', sectionTitle)"
+      :modaltype="'deleteSection'"
+    >
+      <template slot="header">Delete {{sectionTitle}} Section?</template>
+      <template slot="body">
+        <p>Are you sure you want to delete this section? It will be gone forever.</p>
+      </template>
+    </Modal>
   </div>
 </template>
 
