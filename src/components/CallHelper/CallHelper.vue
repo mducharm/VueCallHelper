@@ -1,7 +1,12 @@
 <template>
   <div id="mainDiv" class="card">
     <div class="sidebar">
-      <Menu class="menu-component" :textbox="textbox" @clear-textbox="$emit('clear-textbox')" @copy-to-clipboard="$emit('copy-to-clipboard')"/>
+      <Menu
+        class="menu-component"
+        :textbox="textbox"
+        @clear-textbox="$emit('clear-textbox')"
+        @copy-to-clipboard="$emit('copy-to-clipboard')"
+      />
     </div>
 
     <div class="list-container" id="list-container">
@@ -22,21 +27,23 @@
         {{value}}-->
       </div>
 
-      <div class="list-header">
-        <div @click="showAddSectionModal = true">
-          Add Section
-          <i class="material-icons btn btn-success">add</i>
+      <div>
+        <div class="add-section" @click="showAddSectionModal = true">
+          <button class="btn btn-light add-section-btn">
+            <i class="material-icons">add</i>
+            
+            <div>Add Section</div>
+          </button>
         </div>
 
         <Modal v-show="showAddSectionModal" @close="showAddSectionModal = false">
           <template slot="header">Add New Section...</template>
           <template slot="body">
             <!-- <input type="text" placeholder="Add new section...">
-            <i class="material-icons btn btn-success">add</i> -->
+            <i class="material-icons btn btn-success">add</i>-->
           </template>
           <template slot="footer"></template>
         </Modal>
-
       </div>
     </div>
   </div>
@@ -54,7 +61,7 @@ export default {
     OptionSection,
     Modal
   },
-  props: ["settingsData", 'textbox', 'addOptionMessage'],
+  props: ["settingsData", "textbox", "addOptionMessage"],
   data() {
     return {
       showAddSectionModal: false
@@ -173,6 +180,27 @@ select {
   background: #eee;
   border: 1px solid rgba(85, 85, 85, 0.342);
   font-size: 18px;
+}
+
+.add-section {
+  width: 100%;
+  padding: 12px 20px 12px 40px;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+  background: #eee;
+  border: 1px solid rgba(85, 85, 85, 0.342);
+  font-size: 18px;
+}
+
+.add-section-btn {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-around;
+  align-items: center;
+  padding: 10px;
+  width: 80%;
 }
 
 .logInput {
