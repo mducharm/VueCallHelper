@@ -9,13 +9,45 @@
               <i class="material-icons">clear</i>
             </button>
           </div>
+
           <div class="modal-body">
+            <!-- Body -->
             <slot name="body"></slot>
-            <div v-show="modaltype === 'addItem'">
-              <input type="text" placeholder="Add...">
-              <i class="material-icons btn btn-success">add</i>
+
+            <!-- Add Item -->
+            <div v-show="modaltype === 'addItem'" class="add-block">
+      
+                <!-- <input
+                  type="text"
+                  placeholder="Add new item..."
+                  style="width: 75%"
+                  v-model="addInputText"
+                >
+                <i
+                  class="material-icons btn btn-success"
+                  style="width: 25%; display: inline-block"
+                  @click="addOption()"
+                >add</i> -->
+
+                <div class="input-group mb-3">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Add new item..."
+                    aria-label="Add new item..."
+                    aria-describedby="basic-addon2"
+                    v-model="addInputText"
+                  >
+                  <div class="input-group-append">
+                    <button class="btn btn-success" type="button" @click="addOption()">Add</button>
+                  </div>
+                </div>
+
+            
+              <p>{{ addOptionMessage }}</p>
             </div>
 
+            <!-- Delete Section -->
             <div v-show="modaltype === 'deleteSection'">
               <button class="btn btn-danger" @click="$emit('delete-section')">Delete</button>
               <button class="btn btn-light" @click="$emit('close')">Cancel</button>
@@ -36,9 +68,10 @@
 <script>
 export default {
   name: "Modal",
-  props: ["modaltype"],
+  props: ["modaltype", "addOptionMessage"],
   data() {
     return {
+      addInputText: "",
       postAddMessage: ""
     };
   },
@@ -47,7 +80,9 @@ export default {
       this.postAddMessage = "";
       this.$emit("close");
     },
-    addInput() {}
+    addOption() {
+      this.$emit("add-option", this.addInputText);
+    }
   }
 };
 </script>
@@ -121,12 +156,16 @@ export default {
   transform: scale(1.1);
 }
 
+.add-block {
+  margin-top: 10px;
+}
+
 input {
   margin: 0;
   border: none;
   border-radius: 0;
   width: 100%;
-  padding: 10px;
+  /* padding: 10px; */
   float: left;
   font-size: 16px;
 }

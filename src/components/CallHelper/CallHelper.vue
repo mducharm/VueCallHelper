@@ -10,6 +10,8 @@
           :sectionTitle="sectionObj.name"
           :sectionString="sectionObj.string"
           :optionItems="sectionObj.options"
+          :addOptionMessage="addOptionMessage"
+          @reset-add-message="$emit('reset-add-message')"
           @delete-option="$emit('delete-option', {section: sectionObj.name, option: $event})"
           @toggle-option="$emit('toggle-option', {section: sectionObj.name, option: $event})"
           @update-string="$emit('update-string', {section: sectionObj.name, string: $event})"
@@ -52,7 +54,7 @@ export default {
     OptionSection,
     Modal
   },
-  props: ["settingsData", 'textbox'],
+  props: ["settingsData", 'textbox', 'addOptionMessage'],
   data() {
     return {
       showAddSectionModal: false

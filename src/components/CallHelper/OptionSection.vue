@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- Menu -->
     <div class="list-header">
       <h1 class="list-title">{{sectionTitle}}</h1>
       <div class="section-btns">
@@ -12,13 +13,30 @@
       </div>
     </div>
 
+    <!-- Section Tagline -->
     <input
       placeholder="Add tagline here..."
-      class="logInput"
+      class="form-control"
       :value="sectionString"
       @keyup="$emit('update-string', $event.target.value)"
     >
 
+    <!-- <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon1">Tag</span>
+      </div>
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Add tagline here..."
+        aria-label="tagline"
+        aria-describedby="basic-addon1"
+        :value="sectionString"
+        @keyup="$emit('update-string', $event.target.value)"
+      >
+    </div> -->
+
+    <!-- Option List -->
     <ul>
       <li
         v-for="(optionData, index) in sortedOptions"
@@ -32,19 +50,23 @@
     </ul>
 
     <!-- Modals -->
-
     <!-- Add Item -->
-    <Modal v-show="showAddItemModal" @close="showAddItemModal = false" :modaltype="'addItem'">
+    <Modal
+      v-show="showAddItemModal"
+      @close="showAddItemModal = false; if (addOptionMessage !== '') {$emit('reset-add-message')} "
+      :modaltype="'addItem'"
+      :addOptionMessage="addOptionMessage"
+      @add-option="$emit('add-option', $event)"
+    >
       <template slot="header">Add to: {{sectionTitle}}</template>
-      <template slot="body">
-        Add an item to this section. Hit Enter to quickly add items.
+      <template slot="body">Add an item to this section. Hit Enter to quickly add items.
         <!-- <input
           placeholder="Add new item..."
           class="general-input"
           style="width: 75%"
           v-model="addItemInput"
         >
-        <i class="material-icons btn btn-success" style="width: 25%" @click="addNewItem()">add</i> -->
+        <i class="material-icons btn btn-success" style="width: 25%" @click="addNewItem()">add</i>-->
       </template>
     </Modal>
 
@@ -71,7 +93,7 @@ export default {
   components: {
     Modal
   },
-  props: ["sectionTitle", "sectionString", "optionItems"],
+  props: ["sectionTitle", "sectionString", "optionItems", "addOptionMessage"],
   data() {
     return {
       deleting: false,
@@ -81,9 +103,9 @@ export default {
     };
   },
   methods: {
-    addNewItem() {
-      $emit("add-option", this.addItemInput);
-    },
+    // addNewItem() {
+    //   $emit("add-option", this.addItemInput);
+    // },
     toggleDelete() {
       return this.deleting ? (this.deleting = false) : (this.deleting = true);
     },

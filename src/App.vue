@@ -10,6 +10,8 @@
       v-show="activePage === 1"
       :settingsData="settingsData"
       :textbox="textbox"
+      :addOptionMessage="addOptionMessage"
+      @reset-add-message="addOptionMessage = ''"
       @add-option="addOption($event)"
       @delete-option="deleteOption($event)"
       @toggle-option="toggleOption($event)"
@@ -42,6 +44,7 @@ export default {
     return {
       activePage: 1,
       textboxString: "",
+      addOptionMessage: "",
       settingsData: [
         {
           name: "Call Status",
@@ -190,17 +193,32 @@ export default {
       }
     },
     addOption(e) {
+      // e = {section: sectionObj.name, option: $event}
       var sectionIndex = this.settingsData
         .map(function(section) {
           return section.name;
         })
         .indexOf(e.section);
-      this.settingsData[sectionIndex].options.push({
-        option: e.option,
-        count: 0,
-        checked: false
-      });
-      this.save();
+      var arrayOfOptionNames = this.settingsData[sectionIndex].options.map(
+        function(optionObject) {
+          return optionObject.option;
+        }
+      );
+      if (arrayOfOptionNames.includes(e.option)) {
+        this.addOptionMessage = "Option already exists. ";
+      } else {
+        try {
+          this.settingsData[sectionIndex].options.push({
+            option: e.option,
+            count: 0,
+            checked: false
+          });
+          this.save();
+          this.addOptionMessage = e.option + ' successfully added.';
+        } catch {
+          this.addOptionMessage = "Unable to add new option.";
+        }
+      }
     },
     deleteOption(e) {
       var sectionIndex = this.settingsData
