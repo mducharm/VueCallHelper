@@ -59,7 +59,7 @@
       @add-option="$emit('add-option', $event)"
     >
       <template slot="header">Add to: {{sectionTitle}}</template>
-      <template slot="body">Add an item to this section. Hit Enter to quickly add items.
+      <template slot="body">Add an item to the {{sectionTitle}} section. To quickly add items: <kbd>Enter</kbd>
         <!-- <input
           placeholder="Add new item..."
           class="general-input"

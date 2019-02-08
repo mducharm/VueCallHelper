@@ -206,6 +206,8 @@ export default {
       );
       if (arrayOfOptionNames.includes(e.option)) {
         this.addOptionMessage = "Option already exists. ";
+      } else if (e.option === "") {
+        this.addOptionMessage = "Blank, please enter valid text.";
       } else {
         try {
           this.settingsData[sectionIndex].options.push({
@@ -214,7 +216,7 @@ export default {
             checked: false
           });
           this.save();
-          this.addOptionMessage = e.option + ' successfully added.';
+          this.addOptionMessage = e.option + " successfully added.";
         } catch {
           this.addOptionMessage = "Unable to add new option.";
         }
