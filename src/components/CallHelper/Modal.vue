@@ -16,8 +16,7 @@
 
             <!-- Add Item -->
             <div v-show="modaltype === 'addItem'" class="add-block">
-      
-                <!-- <input
+              <!-- <input
                   type="text"
                   placeholder="Add new item..."
                   style="width: 75%"
@@ -27,24 +26,66 @@
                   class="material-icons btn btn-success"
                   style="width: 25%; display: inline-block"
                   @click="addOption()"
-                >add</i> -->
-
-                <div class="input-group mb-3">
-                  <input
-                    type="text"
-                    class="form-control"
-                    placeholder="Add new item..."
-                    aria-label="Add new item..."
-                    aria-describedby="basic-addon2"
-                    v-model="addInputText"
-                  >
-                  <div class="input-group-append">
-                    <button class="btn btn-success" type="button" @click="addOption()">Add</button>
-                  </div>
+              >add</i>-->
+              <div class="input-group mb-3">
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Add new item..."
+                  aria-label="Add new item..."
+                  aria-describedby="basic-addon2"
+                  v-model="addInputText"
+                  @keyup.enter="addOption()"
+                >
+                <div class="input-group-append">
+                  <button class="btn btn-success" type="button" @click="addOption()">Add</button>
                 </div>
+              </div>
+              <span
+                class="alert alert-warning"
+                role="alert"
+                v-if="addOptionMessage === 'Option already exists.'"
+              >{{ addOptionMessage }}</span>
+              <span
+                class="alert alert-warning"
+                role="alert"
+                v-else-if="addOptionMessage === 'Blank, please enter valid text.'"
+              >{{ addOptionMessage }}</span>
+              <span
+                class="alert alert-success"
+                role="alert"
+                v-else-if="addOptionMessage"
+              >{{ addOptionMessage }}</span>
+            </div>
 
-            
-              <p>{{ addOptionMessage }}</p>
+            <!-- Add Section -->
+            <div v-show="modaltype === 'addSection'" class="add-block">
+              <div class="input-group mb-3">
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Add new section..."
+                  aria-label="Add new section..."
+                  aria-describedby="basic-addon2"
+                  v-model="addInputText"
+                  @keyup.enter="addSection()"
+                >
+                <div class="input-group-append">
+                  <button class="btn btn-success" type="button" @click="addSection()">Add</button>
+                </div>
+              </div>
+              <span
+                class="badge badge-pill badge-warning"
+                v-if="addOptionMessage === 'Option already exists.'"
+              >{{ addOptionMessage }}</span>
+              <span
+                class="badge badge-pill badge-warning"
+                v-else-if="addOptionMessage === 'Blank, please enter valid text.'"
+              >{{ addOptionMessage }}</span>
+              <span
+                class="badge badge-pill badge-success"
+                v-else-if="addOptionMessage"
+              >{{ addOptionMessage }}</span>
             </div>
 
             <!-- Delete Section -->
@@ -71,8 +112,8 @@ export default {
   props: ["modaltype", "addOptionMessage"],
   data() {
     return {
-      addInputText: "",
-      postAddMessage: ""
+      addInputText: ""
+      // postAddMessage: ""
     };
   },
   methods: {
@@ -82,6 +123,11 @@ export default {
     },
     addOption() {
       this.$emit("add-option", this.addInputText);
+      this.addInputText = "";
+    },
+    addSection() {
+      this.$emit("add-section", this.addInputText);
+      this.addInputText = "";
     }
   }
 };
@@ -157,7 +203,7 @@ export default {
 }
 
 .add-block {
-  margin-top: 10px;
+  margin-top: 20px;
 }
 
 input {

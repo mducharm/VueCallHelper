@@ -17,6 +17,7 @@
       @toggle-option="toggleOption($event)"
       @update-string="updateSectionString($event)"
       @clear-textbox="clearTextbox()"
+      @add-section="createSection($event)"
       @delete-section="deleteSection($event)"
       @copy-to-clipboard="copyToClipboard()"
     />
@@ -156,9 +157,9 @@ export default {
     },
     createSection(name) {
       this.settingsData.push({
-        title: name,
+        name: name,
         string: "",
-        items: []
+        options: []
       });
     },
     deleteSection(e) {
@@ -205,7 +206,7 @@ export default {
         }
       );
       if (arrayOfOptionNames.includes(e.option)) {
-        this.addOptionMessage = "Option already exists. ";
+        this.addOptionMessage = "Option already exists.";
       } else if (e.option === "") {
         this.addOptionMessage = "Blank, please enter valid text.";
       } else {

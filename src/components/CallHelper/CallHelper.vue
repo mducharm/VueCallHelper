@@ -31,16 +31,22 @@
         <div class="add-section" @click="showAddSectionModal = true">
           <button class="btn btn-light add-section-btn">
             <i class="material-icons">add</i>
-            
+
             <div>Add Section</div>
           </button>
         </div>
 
-        <Modal v-show="showAddSectionModal" @close="showAddSectionModal = false">
+        <!-- Add New Section -->
+        <Modal
+          v-show="showAddSectionModal"
+          @close="showAddSectionModal = false"
+          :modaltype="'addSection'"
+          @add-section="$emit('add-section', $event)"
+        >
           <template slot="header">Add New Section...</template>
           <template slot="body">
-            <!-- <input type="text" placeholder="Add new section...">
-            <i class="material-icons btn btn-success">add</i>-->
+            Add a new section. Add quickly by hitting
+            <kbd>Enter</kbd>.
           </template>
           <template slot="footer"></template>
         </Modal>
