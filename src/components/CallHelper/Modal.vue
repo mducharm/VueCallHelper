@@ -16,17 +16,6 @@
 
             <!-- Add Item -->
             <div v-show="modaltype === 'addItem'" class="add-block">
-              <!-- <input
-                  type="text"
-                  placeholder="Add new item..."
-                  style="width: 75%"
-                  v-model="addInputText"
-                >
-                <i
-                  class="material-icons btn btn-success"
-                  style="width: 25%; display: inline-block"
-                  @click="addOption()"
-              >add</i>-->
               <div class="input-group mb-3">
                 <input
                   type="text"
@@ -75,21 +64,24 @@
                 </div>
               </div>
               <span
-                class="badge badge-pill badge-warning"
-                v-if="addOptionMessage === 'Option already exists.'"
-              >{{ addOptionMessage }}</span>
+                class="alert alert-warning"
+                role="alert"
+                v-if="addSectionMessage === 'Section already exists.'"
+              >{{ addSectionMessage }}</span>
               <span
-                class="badge badge-pill badge-warning"
-                v-else-if="addOptionMessage === 'Blank, please enter valid text.'"
-              >{{ addOptionMessage }}</span>
+                class="alert alert-warning"
+                role="alert"
+                v-else-if="addSectionMessage === 'Blank, please enter valid text.'"
+              >{{ addSectionMessage }}</span>
               <span
-                class="badge badge-pill badge-success"
-                v-else-if="addOptionMessage"
-              >{{ addOptionMessage }}</span>
+                class="alert alert-success"
+                role="alert"
+                v-else-if="addSectionMessage"
+              >{{ addSectionMessage }}</span>
             </div>
 
             <!-- Delete Section -->
-            <div v-show="modaltype === 'deleteSection'">
+            <div v-show="modaltype === 'deleteSection'" class="del-block">
               <button class="btn btn-danger" @click="$emit('delete-section')">Delete</button>
               <button class="btn btn-light" @click="$emit('close')">Cancel</button>
             </div>
@@ -109,7 +101,7 @@
 <script>
 export default {
   name: "Modal",
-  props: ["modaltype", "addOptionMessage"],
+  props: ["modaltype", "addOptionMessage", "addSectionMessage"],
   data() {
     return {
       addInputText: ""
@@ -118,7 +110,7 @@ export default {
   },
   methods: {
     close() {
-      this.postAddMessage = "";
+      // this.postAddMessage = "";
       this.$emit("close");
     },
     addOption() {
@@ -155,7 +147,8 @@ export default {
   width: 400px;
   margin: 0px auto;
   padding: 20px 30px;
-  background-color: #fff;
+  /* background-color: #fff; */
+  background: rgb(236, 236, 236);
   border-radius: 2px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
   transition: all 0.3s ease;
@@ -204,6 +197,24 @@ export default {
 
 .add-block {
   margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+}
+
+.add-block span {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-content: center;
+}
+
+.del-block {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-content: center;
 }
 
 input {

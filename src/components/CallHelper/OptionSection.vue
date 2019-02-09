@@ -79,7 +79,7 @@
     >
       <template slot="header">Delete {{sectionTitle}} Section?</template>
       <template slot="body">
-        <p>Are you sure you want to delete this section? It will be gone forever.</p>
+        <p class="modal-text">Are you sure you want to delete {{sectionTitle}}?</p>
       </template>
     </Modal>
   </div>
@@ -93,7 +93,7 @@ export default {
   components: {
     Modal
   },
-  props: ["sectionTitle", "sectionString", "optionItems", "addOptionMessage"],
+  props: ["sectionTitle", "sectionString", "optionItems", "addOptionMessage", "addSectionMessage"],
   data() {
     return {
       deleting: false,
@@ -278,5 +278,12 @@ ul li.checked::before {
   transition: 0.3s;
   border-radius: 0;
   white-space: nowrap;
+}
+
+.modal-text {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-content: center;
 }
 </style>

@@ -11,7 +11,9 @@
       :settingsData="settingsData"
       :textbox="textbox"
       :addOptionMessage="addOptionMessage"
+      :addSectionMessage="addSectionMessage"
       @reset-add-message="addOptionMessage = ''"
+      @reset-section-message="addSectionMessage = ''"
       @add-option="addOption($event)"
       @delete-option="deleteOption($event)"
       @toggle-option="toggleOption($event)"
@@ -46,6 +48,7 @@ export default {
       activePage: 1,
       textboxString: "",
       addOptionMessage: "",
+      addSectionMessage: "",
       settingsData: [
         {
           name: "Call Status",
@@ -155,12 +158,28 @@ export default {
       this.settingsData[sectionIndex].string = e.string;
       this.save();
     },
-    createSection(name) {
-      this.settingsData.push({
-        name: name,
-        string: "",
-        options: []
+    createSection(e) {
+      // e = section name
+      var sectionArray = this.settingsData.map(function(sectionObj) {
+        return sectionObj.name;
       });
+      if (sectionArray.includes(e)) {
+        this.addSectionMessage = "Section already exists.";
+      } else if (e === "") {
+        this.addSectionMessage = "Blank, please enter valid text.";
+      } else {
+        try {
+          this.settingsData.push({
+            name: e,
+            string: "",
+            options: []
+          });
+          this.save();
+          this.addSectionMessage = e + " successfully added.";
+        } catch {
+          this.addSectionMessage = "Unable to add new section.";
+        }
+      }
     },
     deleteSection(e) {
       // e === section name

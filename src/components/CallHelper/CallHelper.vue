@@ -39,9 +39,11 @@
         <!-- Add New Section -->
         <Modal
           v-show="showAddSectionModal"
-          @close="showAddSectionModal = false"
+          @close="showAddSectionModal = false; if (addSectionMessage !== '') {$emit('reset-section-message')}"
           :modaltype="'addSection'"
           @add-section="$emit('add-section', $event)"
+          :addSectionMessage="addSectionMessage"
+          @reset-section-message="$emit('reset-section-message')"
         >
           <template slot="header">Add New Section...</template>
           <template slot="body">
@@ -67,7 +69,7 @@ export default {
     OptionSection,
     Modal
   },
-  props: ["settingsData", "textbox", "addOptionMessage"],
+  props: ["settingsData", "textbox", "addOptionMessage", "addSectionMessage"],
   data() {
     return {
       showAddSectionModal: false
