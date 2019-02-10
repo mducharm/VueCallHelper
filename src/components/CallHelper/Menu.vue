@@ -31,7 +31,8 @@
         <h4>Settings</h4>
       </template>
       <template slot="body">
-        <button class="btn btn-light">Import</button>
+        <button class="btn btn-light" @click="$emit('confirm-import')">Load</button>
+        <input class="btn btn-light" type="file" @change="loadFile($event)">
         <button class="btn btn-light" @click="$emit('export-settings')">Export</button>
         <p>Load Presets</p>
         <button class="btn btn-light">Load</button>
@@ -58,13 +59,13 @@
               <th scope="col">Count</th>
             </tr>
           </thead>
-            <tbody v-for="(section, key) in settingsData" :key="key">
-              <tr v-for="(option, optionKey) in section.options" :key="optionKey">
-                <td>{{ section.name }}</td>
-                <td>{{ option.option }}</td>
-                <td>{{ option.count }}</td>
-              </tr>
-            </tbody>
+          <tbody v-for="(section, key) in settingsData" :key="key">
+            <tr v-for="(option, optionKey) in section.options" :key="optionKey">
+              <td>{{ section.name }}</td>
+              <td>{{ option.option }}</td>
+              <td>{{ option.count }}</td>
+            </tr>
+          </tbody>
         </table>
       </template>
       <template slot="footer"></template>
@@ -127,6 +128,20 @@ export default {
       setTimeout(() => {
         this.copyToolTip = false;
       }, 1000);
+    },
+    loadFile(ev) {
+      const file = ev.target.files[0];
+      const reader = new FileReader();
+
+      var importedData = '';
+
+      // reader.onload = function(e) {
+      //   $emit("file-loaded", e.target.result)
+      // };
+      // reader.readAsText(file);
+
+      reader.onload = (e) => this.$emit("file-loaded", e.target.result);
+      reader.readAsText(file);
     }
   }
 };

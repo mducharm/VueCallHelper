@@ -82,7 +82,7 @@
 
             <!-- Delete Section -->
             <div v-show="modaltype === 'deleteSection'" class="del-block">
-              <button class="btn btn-danger" @click="$emit('delete-section')">Delete</button>
+              <button class="btn btn-danger" @click="$emit('delete-section'); $emit('close')">Delete</button>
               <button class="btn btn-light" @click="$emit('close')">Cancel</button>
             </div>
 

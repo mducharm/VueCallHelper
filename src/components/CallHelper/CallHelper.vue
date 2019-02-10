@@ -9,6 +9,8 @@
         @copy-to-clipboard="$emit('copy-to-clipboard')"
         @reset="$emit('reset')"
         @export-settings="$emit('export-settings')"
+        @file-loaded="$emit('file-loaded', $event)"
+        @confirm-import="$emit('confirm-import')"
       />
     </div>
 

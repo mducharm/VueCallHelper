@@ -24,6 +24,8 @@
       @copy-to-clipboard="copyToClipboard()"
       @reset="reset()"
       @export-settings="exportJSON()"
+      @file-loaded="queueImportedJSON($event)"
+      @confirm-import="loadImportedJSON()"
     />
   </div>
 </template>
@@ -54,6 +56,7 @@ export default {
       textboxString: "",
       addOptionMessage: "",
       addSectionMessage: "",
+      temporaryJSONData: "",
       settingsData: [],
       defaultPreset: [
         {
@@ -333,7 +336,13 @@ export default {
       downloadAnchorNode.click();
       downloadAnchorNode.remove();
     },
-    importJSON() {}
+    queueImportedJSON(e){
+      this.temporaryJSONData = e;
+    },
+    loadImportedJSON() {
+      this.settingsData = JSON.parse(this.temporaryJSONData);
+      this.save();
+    }
   }
 };
 </script>
