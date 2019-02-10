@@ -1,9 +1,5 @@
 <template>
   <div class="header">
-    <!-- 
-    <h2>Call Log Creator</h2>
-    <p>Check off the boxes while you're on the phone to create a detailed call log.</p>
-    -->
     <div class="call-helper-header">
       <img
         class="small-TLH-icon"
@@ -12,6 +8,8 @@
       >
       <h2 class="call-helper-header-text">Call Helper</h2>
     </div>
+
+    <!-- Menu options -->
     <div class="icons-bar">
       <i class="material-icons menu-icon" @click="showSettings = true">settings</i>
       <i class="material-icons menu-icon" @click="showAbout = true">help_outline</i>
@@ -21,29 +19,83 @@
       <div class="menu-icon-with-tooltip" @click="handleCopyToClipboard()">
         <i class="material-icons menu-icon-inner">file_copy</i>
         <transition name="copy-tool-tip-transition">
-          <div class="copy-tool-tip btn btn-dark" v-show="copyToolTip">Copied to Clipboard</div>
+          <div class="btn btn-dark copy-tool-tip" v-show="copyToolTip">Copied to Clipboard</div>
         </transition>
       </div>
-
       <i class="material-icons menu-icon" @click="$emit('clear-textbox')">settings_backup_restore</i>
     </div>
-    <!-- <span onclick="copyText()" class="copyTextBtn">Copy to Clipboard</span>
-    <span onclick="location.reload();" class="copyTextBtn" id="clearBtn">Clear</span>-->
+
+    <!-- Settings Modal -->
     <Modal v-show="showSettings" @close="showSettings = false">
-      <template slot="header">Settings</template>
+      <template slot="header">
+        <h4>Settings</h4>
+      </template>
       <template slot="body">
-        <p>Import/Export</p>
+        <button class="btn btn-light">Import</button>
+        <button class="btn btn-light" @click="$emit('export-settings')">Export</button>
         <p>Load Presets</p>
-        <p>Reset to Default Settings</p>
-        <p>View counts for all options</p>
+        <button class="btn btn-light">Load</button>
+        <button class="btn btn-light" @click="showOptionData = true">View Option Data</button>
+        <button
+          class="btn btn-danger"
+          @click="showResetConfirmation = true"
+        >Reset to Default Settings</button>
       </template>
       <template slot="footer"></template>
     </Modal>
 
-    <Modal v-show="showAbout" @close="showAbout = false">
-      <template slot="header">About</template>
+    <!-- View Option Data -->
+    <Modal v-show="showOptionData" @close="showOptionData = false">
+      <template slot="header">
+        <h4>View Option Data</h4>
+      </template>
       <template slot="body">
-        <p>Check off the boxes while you're on the phone to create a detailed call log.</p>
+        <table class="table table-striped table-sm">
+          <thead>
+            <tr>
+              <th scope="col">Section</th>
+              <th scope="col">Option</th>
+              <th scope="col">Count</th>
+            </tr>
+          </thead>
+            <tbody v-for="(section, key) in settingsData" :key="key">
+              <tr v-for="(option, optionKey) in section.options" :key="optionKey">
+                <td>{{ section.name }}</td>
+                <td>{{ option.option }}</td>
+                <td>{{ option.count }}</td>
+              </tr>
+            </tbody>
+        </table>
+      </template>
+      <template slot="footer"></template>
+    </Modal>
+
+    <!-- Reset -->
+    <Modal
+      v-show="showResetConfirmation"
+      @reset="$emit('reset')"
+      @close="showResetConfirmation = false"
+      :modaltype="'reset'"
+    >
+      <template slot="header">
+        <h4>Reset?</h4>
+      </template>
+      <template slot="body">
+        <p>Are you sure you wish to reset back to default settings?</p>
+      </template>
+      <template slot="footer"></template>
+    </Modal>
+
+    <!-- About -->
+    <Modal v-show="showAbout" @close="showAbout = false">
+      <template slot="header">
+        <h4>About</h4>
+      </template>
+      <template slot="body">
+        <p>This app assists you with keeping detailed notes while on the phone. It's faster and easier to click instead of type, particularly when you are discussing complex topics.</p>
+        <p>You can add your own sections and options as you wish. It saves your settings to your local browser's storage, so feel free to add/delete to fit your school's needs and your note-taking style.</p>
+        <p>To use this effectively, I would suggest including anything you frequently discuss over the phone. If you find yourself typing something over and over, simply add it as a new item.</p>
+        <p>- Michael Ducharm</p>
       </template>
       <template slot="footer"></template>
     </Modal>
@@ -58,12 +110,14 @@ export default {
   components: {
     Modal
   },
-  props: ["textbox"],
+  props: ["textbox", "settingsData"],
   data() {
     return {
       copyToolTip: false,
       showSettings: false,
-      showAbout: false
+      showAbout: false,
+      showResetConfirmation: false,
+      showOptionData: false
     };
   },
   methods: {
@@ -177,6 +231,8 @@ textarea {
   top: -50px;
   right: 0;
   left: 0;
+  width: 170px;
+  pointer-events: none;
 }
 
 .copy-tool-tip-transition-enter-active,
@@ -188,4 +244,11 @@ textarea {
   opacity: 0;
 }
 
+.table {
+  overflow: scroll;
+}
+
+p {
+  text-align: left;
+}
 </style>

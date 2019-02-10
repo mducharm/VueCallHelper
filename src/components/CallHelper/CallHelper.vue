@@ -4,8 +4,11 @@
       <Menu
         class="menu-component"
         :textbox="textbox"
+        :settingsData="settingsData"
         @clear-textbox="$emit('clear-textbox')"
         @copy-to-clipboard="$emit('copy-to-clipboard')"
+        @reset="$emit('reset')"
+        @export-settings="$emit('export-settings')"
       />
     </div>
 
@@ -45,7 +48,7 @@
           :addSectionMessage="addSectionMessage"
           @reset-section-message="$emit('reset-section-message')"
         >
-          <template slot="header">Add New Section...</template>
+          <template slot="header"><h4>Add New Section...</h4></template>
           <template slot="body">
             Add a new section. Add quickly by hitting
             <kbd>Enter</kbd>.

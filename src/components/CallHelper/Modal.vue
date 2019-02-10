@@ -85,6 +85,12 @@
               <button class="btn btn-danger" @click="$emit('delete-section')">Delete</button>
               <button class="btn btn-light" @click="$emit('close')">Cancel</button>
             </div>
+
+            <!-- Reset everything -->
+            <div v-show="modaltype === 'reset'" class="del-block">
+              <button class="btn btn-danger" @click="$emit('reset'); $emit('close')">Reset</button>
+              <button class="btn btn-light" @click="$emit('close')">Cancel</button>
+            </div>
           </div>
 
           <div class="modal-footer">
@@ -153,6 +159,8 @@ export default {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
   transition: all 0.3s ease;
   font-family: Helvetica, Arial, sans-serif;
+  max-height: 100%;
+  overflow-y: auto;
 }
 
 .modal-header h3 {

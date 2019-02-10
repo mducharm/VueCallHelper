@@ -22,6 +22,8 @@
       @add-section="createSection($event)"
       @delete-section="deleteSection($event)"
       @copy-to-clipboard="copyToClipboard()"
+      @reset="reset()"
+      @export-settings="exportJSON()"
     />
   </div>
 </template>
@@ -41,6 +43,9 @@ export default {
       this.settingsData = JSON.parse(
         localStorage.getItem("callHelperSettings")
       );
+    } else {
+      this.settingsData = this.defaultPreset;
+      this.save();
     }
   },
   data() {
@@ -49,7 +54,8 @@ export default {
       textboxString: "",
       addOptionMessage: "",
       addSectionMessage: "",
-      settingsData: [
+      settingsData: [],
+      defaultPreset: [
         {
           name: "Call Status",
           string: "test",
@@ -113,18 +119,39 @@ export default {
   computed: {
     textbox: function() {
       // this is pretty gross, but it updates the textbox based on anything checked off
+
+      //    Example object:
+      //        {
+      //           name: "General",
+      //           string: "Reviewed: ",
+      //           options: []
+      //        }
+
+      // First, map over the data to get all the checked options in a format that's easier to iterate over
       var checkedOptionsArr = this.settingsData.map(function(obj) {
-        var objVals = Object.values(obj);
+        var objVals = Object.values(obj); // get the values for each object. e.g. ["General", "Reviewed: ", [array of options]]
+
+        // filter for only the options with the array where checked = true
         var checkedOptVals = objVals[2].filter(function(optionObject) {
           return optionObject.checked;
         });
+
+        // checkedOptVals = [array of checked options]
+
         var arr = objVals;
+
+        // sets the [array of options objects] to just their string e.g. ['V2V', 'LVM', ...]
         arr[2] = checkedOptVals.map(function(x) {
           return x.option;
         });
+
+        // returns each object as an array with the third item being an array of checked options' names
         return arr;
       });
+
       var text = "";
+
+      // for every array within checkedOptionsArr, add the section's string with list of checked options to text if checked options.length != 0
       checkedOptionsArr.forEach(function(arr) {
         if (arr[2].length === 1) {
           text += arr[1] + " " + arr[2][0] + "\n";
@@ -139,6 +166,8 @@ export default {
           text += "\n";
         }
       });
+
+      // returns section.string + all checked options
       return text;
     }
   },
@@ -264,6 +293,7 @@ export default {
       try {
         var successful = document.execCommand("copy");
         var msg = successful ? "successful" : "unsuccessful";
+        this.incrementOptionCounts();
       } catch (err) {
         alert("Oops, unable to copy");
       }
@@ -278,7 +308,32 @@ export default {
           optionObject.checked = false;
         });
       });
-    }
+    },
+    reset() {
+      this.settingsData = this.defaultPreset;
+      this.save();
+    },
+    incrementOptionCounts() {
+      this.settingsData.forEach(function(sectionObject) {
+        sectionObject.options.forEach(function(optionObject) {
+          if (optionObject.checked) {
+            optionObject.count += 1;
+          }
+        });
+      });
+    },
+    exportJSON() {
+      var dataStr =
+        "data:text/json;charset=utf-8," +
+        encodeURIComponent(localStorage.getItem("callHelperSettings"));
+      var downloadAnchorNode = document.createElement("a");
+      downloadAnchorNode.setAttribute("href", dataStr);
+      downloadAnchorNode.setAttribute("download", "CallHelperSettings.json");
+      document.body.appendChild(downloadAnchorNode);
+      downloadAnchorNode.click();
+      downloadAnchorNode.remove();
+    },
+    importJSON() {}
   }
 };
 </script>

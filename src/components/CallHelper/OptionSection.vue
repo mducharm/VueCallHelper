@@ -4,10 +4,10 @@
     <div class="list-header">
       <h1 class="list-title">{{sectionTitle}}</h1>
       <div class="section-btns">
-        <i class="material-icons btn btn-success" @click="showAddItemModal = true">add</i>
-        <i class="material-icons btn btn-danger" @click="toggleDelete">clear</i>
+        <i class="material-icons btn btn-outline-success" @click="showAddItemModal = true">add</i>
+        <i class="material-icons btn btn-outline-danger" @click="toggleDelete">clear</i>
         <i
-          class="material-icons deleteSection btn btn-dark"
+          class="material-icons deleteSection btn btn-outline-dark"
           @click="showDeleteSectionModal = true"
         >delete</i>
       </div>
@@ -58,7 +58,7 @@
       :addOptionMessage="addOptionMessage"
       @add-option="$emit('add-option', $event)"
     >
-      <template slot="header">Add to: {{sectionTitle}}</template>
+      <template slot="header"><h4>Add to: {{sectionTitle}}</h4></template>
       <template slot="body">Add an item to the {{sectionTitle}} section. Add quickly by hitting <kbd>Enter</kbd>.
         <!-- <input
           placeholder="Add new item..."
@@ -77,7 +77,7 @@
       @delete-section="$emit('delete-section', sectionTitle)"
       :modaltype="'deleteSection'"
     >
-      <template slot="header">Delete {{sectionTitle}} Section?</template>
+      <template slot="header"><h4>Delete {{sectionTitle}} Section?</h4></template>
       <template slot="body">
         <p class="modal-text">Are you sure you want to delete {{sectionTitle}}?</p>
       </template>
