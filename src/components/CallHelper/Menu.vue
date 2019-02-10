@@ -11,18 +11,18 @@
 
     <!-- Menu options -->
     <div class="icons-bar">
-      <i class="material-icons menu-icon" @click="showSettings = true">settings</i>
-      <i class="material-icons menu-icon" @click="showAbout = true">help_outline</i>
+      <i class="material-icons menu-icon btn btn-light" @click="showSettings = true">settings</i>
+      <i class="material-icons menu-icon btn btn-light" @click="showAbout = true">help_outline</i>
     </div>
     <textarea name="callLog" ref="textbox" cols="40" rows="5" id="callLog" v-model="textbox"></textarea>
     <div class="icons-bar">
-      <div class="menu-icon-with-tooltip" @click="handleCopyToClipboard()">
+      <div class="menu-icon-with-tooltip btn btn-light" @click="handleCopyToClipboard()">
         <i class="material-icons menu-icon-inner">file_copy</i>
         <transition name="copy-tool-tip-transition">
           <div class="btn btn-dark copy-tool-tip" v-show="copyToolTip">Copied to Clipboard</div>
         </transition>
       </div>
-      <i class="material-icons menu-icon" @click="$emit('clear-textbox')">settings_backup_restore</i>
+      <i class="material-icons menu-icon btn btn-light" @click="$emit('clear-textbox')">settings_backup_restore</i>
     </div>
 
     <!-- Settings Modal -->
@@ -31,16 +31,84 @@
         <h4>Settings</h4>
       </template>
       <template slot="body">
-        <button class="btn btn-light" @click="$emit('confirm-import')">Load</button>
-        <input class="btn btn-light" type="file" @change="loadFile($event)">
-        <button class="btn btn-light" @click="$emit('export-settings')">Export</button>
-        <p>Load Presets</p>
-        <button class="btn btn-light">Load</button>
-        <button class="btn btn-light" @click="showOptionData = true">View Option Data</button>
-        <button
-          class="btn btn-danger"
-          @click="showResetConfirmation = true"
-        >Reset to Default Settings</button>
+        <ul>
+          <li>
+            <!-- View Data -->
+            <button
+              class="btn btn-light"
+              @click="showOptionData = true"
+              style="width: 100%;"
+            >View Usage Data</button>
+          </li>
+          <li>
+            <!-- Export -->
+            <button
+              class="btn btn-light"
+              @click="$emit('export-settings')"
+              style="width: 100%;"
+            >Export Settings</button>
+          </li>
+          <li>
+            <!-- Toggle Datetime Button -->
+            <button class="btn btn-light datetime-btn" @click="handleDateTime()">
+              <i v-if="datetimeTagProp" class="material-icons">check_box</i>
+              <i v-else class="material-icons">check_box_outline_blank</i>
+              Toggle Datetime Tag</button>
+          </li>
+          <li>
+            <h6>Import</h6>
+            <!-- Import -->
+            <div class="input-group">
+              <div class="custom-file">
+                <input
+                  type="file"
+                  class="custom-file-input importInput"
+                  id="importJSONinput"
+                  @change="loadFile($event)"
+                >
+                <label class="custom-file-label" for="importJSONinput"><p class="chooseFile">Choose File</p></label>
+              </div>
+              <div class="input-group-append">
+                <button
+                  class="btn btn-outline-secondary"
+                  type="button"
+                  @click="$emit('confirm-import')"
+                >Load</button>
+              </div>
+            </div>
+            <span
+              class="alert alert-warning"
+              role="alert"
+              v-if="importSettingsMessage === 'Error - unable to import settings.'"
+            >{{ importSettingsMessage }}</span>
+            <span
+              class="alert alert-success"
+              role="alert"
+              v-else-if="importSettingsMessage"
+            >{{ importSettingsMessage }}</span>
+          </li>
+          <li>
+            <!-- Select presets -->
+            <h6>Load Preset</h6>
+            <div class="input-group">
+              <select class="custom-select" id="inputGroupSelect04" disabled>
+                <option selected>Choose...</option>
+                <option value="1">TuP - Enrollment</option>
+                <option value="2">TuP - Retention</option>
+                <!-- <option value="3"></option> -->
+              </select>
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" disabled>Load</button>
+              </div>
+            </div>
+          </li>
+          <li>
+            <button
+              class="btn btn-danger"
+              @click="showResetConfirmation = true"
+            >Reset to Default Settings</button>
+          </li>
+        </ul>
       </template>
       <template slot="footer"></template>
     </Modal>
@@ -111,14 +179,14 @@ export default {
   components: {
     Modal
   },
-  props: ["textbox", "settingsData"],
+  props: ["textbox", "settingsData", "importSettingsMessage", "datetimeTagProp"],
   data() {
     return {
       copyToolTip: false,
       showSettings: false,
       showAbout: false,
       showResetConfirmation: false,
-      showOptionData: false
+      showOptionData: false,
     };
   },
   methods: {
@@ -129,18 +197,25 @@ export default {
         this.copyToolTip = false;
       }, 1000);
     },
+    handleDateTime() {
+      if (this.datetimeTagProp) {
+        this.$emit("datetime-toggled", false);
+      } else {
+        this.$emit("datetime-toggled", true);
+      }
+    },
     loadFile(ev) {
       const file = ev.target.files[0];
       const reader = new FileReader();
 
-      var importedData = '';
+      var importedData = "";
 
       // reader.onload = function(e) {
       //   $emit("file-loaded", e.target.result)
       // };
       // reader.readAsText(file);
 
-      reader.onload = (e) => this.$emit("file-loaded", e.target.result);
+      reader.onload = e => this.$emit("file-loaded", e.target.result);
       reader.readAsText(file);
     }
   }
@@ -257,6 +332,39 @@ textarea {
 
 .copy-tool-tip-transition-enter, .copy-tool-tip-transition-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  padding-bottom: 2%;
+  width: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+  list-style-type: none;
+}
+
+ul li {
+  /* padding: 12px 30px 12px 30px; */
+  padding-bottom: 22px;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.datetime-btn {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  width: 70%;
+}
+
+.chooseFile {
+  position: absolute;
+  left: 10px;
 }
 
 .table {

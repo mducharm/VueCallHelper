@@ -5,6 +5,9 @@
         class="menu-component"
         :textbox="textbox"
         :settingsData="settingsData"
+        :importSettingsMessage="importSettingsMessage"
+        :datetimeTagProp="datetimeTagProp"
+        @datetime-toggled="$emit('datetime-toggled', $event)"
         @clear-textbox="$emit('clear-textbox')"
         @copy-to-clipboard="$emit('copy-to-clipboard')"
         @reset="$emit('reset')"
@@ -74,7 +77,7 @@ export default {
     OptionSection,
     Modal
   },
-  props: ["settingsData", "textbox", "addOptionMessage", "addSectionMessage"],
+  props: ["settingsData", "textbox", "addOptionMessage", "addSectionMessage", "importSettingsMessage", "datetimeTagProp"],
   data() {
     return {
       showAddSectionModal: false

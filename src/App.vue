@@ -12,6 +12,9 @@
       :textbox="textbox"
       :addOptionMessage="addOptionMessage"
       :addSectionMessage="addSectionMessage"
+      :importSettingsMessage="importSettingsMessage"
+      :datetimeTagProp="datetimeTag"
+      @datetime-toggled="datetimeTag = $event; save()"
       @reset-add-message="addOptionMessage = ''"
       @reset-section-message="addSectionMessage = ''"
       @add-option="addOption($event)"
@@ -42,9 +45,11 @@ export default {
   },
   mounted: function() {
     if (localStorage.getItem("callHelperSettings")) {
-      this.settingsData = JSON.parse(
+      var localData = JSON.parse(
         localStorage.getItem("callHelperSettings")
       );
+      this.settingsData = localData.settingsData;
+      this.datetimeTag = localData.datetimeTag;
     } else {
       this.settingsData = this.defaultPreset;
       this.save();
@@ -56,12 +61,14 @@ export default {
       textboxString: "",
       addOptionMessage: "",
       addSectionMessage: "",
+      importSettingsMessage: "",
       temporaryJSONData: "",
+      datetimeTag: false,
       settingsData: [],
       defaultPreset: [
         {
           name: "Call Status",
-          string: "test",
+          string: "",
           options: [
             {
               option: "V2V",
@@ -69,27 +76,83 @@ export default {
               checked: false
             },
             {
-              option: "Potato",
+              option: "LVM",
               count: 0,
               checked: false
             },
             {
-              option: "Potato2",
+              option: "VM not set up",
               count: 0,
               checked: false
             },
             {
-              option: "Potato3",
+              option: "PUHU",
               count: 0,
               checked: false
             },
             {
-              option: "Potato4",
+              option: "V2V - called in, verified.",
               count: 0,
               checked: false
             },
             {
-              option: "Potato5",
+              option: "LVM - need financial plan",
+              count: 0,
+              checked: false
+            }
+          ]
+        },
+        {
+          name: "Identify Plan",
+          string: "Identified Plan: ",
+          options: [
+            {
+              option: "FA",
+              count: 0,
+              checked: false
+            },
+            {
+              option: "FA, but grants only",
+              count: 0,
+              checked: false
+            },
+            {
+              option: "OOP",
+              count: 0,
+              checked: false
+            },
+            {
+              option: "Payment Plan",
+              count: 0,
+              checked: false
+            },
+            {
+              option: "Military Benefits",
+              count: 0,
+              checked: false
+            },
+            {
+              option: "Private Loans",
+              count: 0,
+              checked: false
+            },
+            {
+              option: "TR",
+              count: 0,
+              checked: false
+            },
+            {
+              option: "Tuition Assistance",
+              count: 0,
+              checked: false
+            },
+            {
+              option: "3rd Party",
+              count: 0,
+              checked: false
+            },
+            {
+              option: "Scholarships",
               count: 0,
               checked: false
             }
@@ -105,12 +168,94 @@ export default {
               checked: false
             },
             {
-              option: "zDRT",
+              option: "Tuition Cost",
               count: 0,
               checked: false
             },
             {
-              option: "FAFSA",
+              option: "Loans vs Grants",
+              count: 0,
+              checked: false
+            },
+            {
+              option: "Responsible Borrowing",
+              count: 0,
+              checked: false
+            },
+            {
+              option: "SAP Policy",
+              count: 0,
+              checked: false
+            },
+            {
+              option: "TuP Role",
+              count: 0,
+              checked: false
+            },
+            {
+              option: "Unsubsidized Loans",
+              count: 0,
+              checked: false
+            },
+          ]
+        },
+        {
+          name: "Next Step",
+          string: "Next Step: ",
+          options: [
+            {
+              option: "Complete FAFSA",
+              count: 0,
+              checked: false
+            },
+            {
+              option: "Add School Code",
+              count: 0,
+              checked: false
+            },
+            {
+              option: "Accept Award",
+              count: 0,
+              checked: false
+            },
+            {
+              option: "Entrance Counseling",
+              count: 0,
+              checked: false
+            },
+            {
+              option: "MPN",
+              count: 0,
+              checked: false
+            }
+          ]
+        },
+        {
+          name: "Post-Call Emails",
+          string: "Post-call email: ",
+          options: [
+            {
+              option: "Payment Options",
+              count: 0,
+              checked: false
+            },
+            {
+              option: "School Resources",
+              count: 0,
+              checked: false
+            },
+            {
+              option: "FA Award Info",
+              count: 0,
+              checked: false
+            },
+            {
+              option: "Scholarship Info",
+              count: 0,
+              checked: false
+            },
+            {
+              option: "Student Account Set-up Info",
               count: 0,
               checked: false
             }
@@ -154,14 +299,22 @@ export default {
 
       var text = "";
 
+      if (this.datetimeTag) {
+        text += this.currentDateTime;
+      }
+
       // for every array within checkedOptionsArr, add the section's string with list of checked options to text if checked options.length != 0
       checkedOptionsArr.forEach(function(arr) {
         if (arr[2].length === 1) {
-          text += arr[1] + " " + arr[2][0] + "\n";
+          if (arr[1]) {
+            text += arr[1] + " "
+          }
+          text += arr[2][0] + "\n";
         } else if (arr[2].length > 1) {
+          if (arr[1]) {
+            text += arr[1] + " "
+          }
           text +=
-            arr[1] +
-            " " +
             arr[2].reduce(function(acc, x, idx, array) {
               return idx < array.length ? acc + ", " + x : acc + x;
             });
@@ -172,13 +325,30 @@ export default {
 
       // returns section.string + all checked options
       return text;
+    },
+    currentDateTime() {
+      var today = new Date();
+      var mm = today.getMonth();
+      var dd = today.getDate();
+      var hour =
+        today.getHours() > 12
+          ? today.getHours() - 12
+          : today.getHours() < 10
+          ? "0" + today.getHours()
+          : today.getHours();
+      var minutes =
+        today.getMinutes() < 10 ? "0" + today.getMinutes() : today.getMinutes();
+      return mm + "/" + dd + " " + hour + ":" + minutes + "\n";
     }
   },
   methods: {
     save() {
       localStorage.setItem(
         "callHelperSettings",
-        JSON.stringify(this.settingsData)
+        JSON.stringify({
+          settingsData: this.settingsData,
+          datetimeTag: this.datetimeTag
+        })
       );
     },
     updateSectionString(e) {
@@ -336,12 +506,17 @@ export default {
       downloadAnchorNode.click();
       downloadAnchorNode.remove();
     },
-    queueImportedJSON(e){
+    queueImportedJSON(e) {
       this.temporaryJSONData = e;
     },
     loadImportedJSON() {
-      this.settingsData = JSON.parse(this.temporaryJSONData);
-      this.save();
+      try {
+        this.settingsData = JSON.parse(this.temporaryJSONData);
+        this.save();
+        this.importSettingsMessage = "Settings imported successfully.";
+      } catch {
+        this.importSettingsMessage = "Error - unable to import settings.";
+      }
     }
   }
 };

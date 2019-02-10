@@ -34,8 +34,7 @@
         :value="sectionString"
         @keyup="$emit('update-string', $event.target.value)"
       >
-    </div> -->
-
+    </div>-->
     <!-- Option List -->
     <ul>
       <li
@@ -44,6 +43,8 @@
         @click="handleOptionClick(optionData.option)"
         v-bind:class="{ checked: optionData.checked, deleting: deleting }"
       >
+        <i v-if="optionData.checked" class="material-icons checked-box">check_box</i>
+        <i v-else class="material-icons unchecked-box">check_box_outline_blank</i>
         <div>{{optionData.option}}</div>
         <i class="material-icons" v-show="deleting">clear</i>
       </li>
@@ -58,8 +59,12 @@
       :addOptionMessage="addOptionMessage"
       @add-option="$emit('add-option', $event)"
     >
-      <template slot="header"><h4>Add to: {{sectionTitle}}</h4></template>
-      <template slot="body">Add an item to the {{sectionTitle}} section. Add quickly by hitting <kbd>Enter</kbd>.
+      <template slot="header">
+        <h4>Add to: {{sectionTitle}}</h4>
+      </template>
+      <template slot="body">
+        Add an item to the {{sectionTitle}} section. Add quickly by hitting
+        <kbd>Enter</kbd>.
         <!-- <input
           placeholder="Add new item..."
           class="general-input"
@@ -77,7 +82,9 @@
       @delete-section="$emit('delete-section', sectionTitle)"
       :modaltype="'deleteSection'"
     >
-      <template slot="header"><h4>Delete {{sectionTitle}} Section?</h4></template>
+      <template slot="header">
+        <h4>Delete {{sectionTitle}} Section?</h4>
+      </template>
       <template slot="body">
         <p class="modal-text">Are you sure you want to delete {{sectionTitle}}?</p>
       </template>
@@ -93,7 +100,13 @@ export default {
   components: {
     Modal
   },
-  props: ["sectionTitle", "sectionString", "optionItems", "addOptionMessage", "addSectionMessage"],
+  props: [
+    "sectionTitle",
+    "sectionString",
+    "optionItems",
+    "addOptionMessage",
+    "addSectionMessage"
+  ],
   data() {
     return {
       deleting: false,
@@ -236,7 +249,7 @@ ul li.deleting {
   color: #fff;
 }
 
-ul li.checked::before {
+/* ul li.checked::before {
   content: "";
   position: absolute;
   border-color: #fff;
@@ -247,6 +260,16 @@ ul li.checked::before {
   transform: rotate(45deg);
   height: 15px;
   width: 7px;
+} */
+
+.checked-box, .unchecked-box {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.unchecked-box {
+  color: rgb(189, 189, 189);
 }
 
 .close {
