@@ -1,4 +1,9 @@
 # Call Log Creator
-Sometimes you need to keep track of what you've discussed in a call. But it's difficult to write or type everything that you've covered, so how do you keep track of this?
 
-If you know what information you may be discussing ahead of time, this Call Log Creator helps you easily create a log of the topics of conversation discussed during the call. Simply check off the boxes while you are on the phone to create a detailed call log.
+This app assists you with keeping detailed notes while on the phone. It's faster and easier to click instead of type, particularly when you are discussing complex topics.
+
+You can add your own sections and options as you wish. It saves your settings to your local browser's storage, so feel free to add/delete to fit your school's needs and your note-taking style.
+
+To use this effectively, I would suggest including anything you frequently discuss over the phone. If you find yourself typing something over and over, simply add it as a new item.
+
+https://mducharm.github.io/VueCallHelper/
