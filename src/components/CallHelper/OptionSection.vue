@@ -4,11 +4,12 @@
     <div class="list-header">
       <h1 class="list-title">{{sectionTitle}}</h1>
       <div class="section-btns">
-        <i class="material-icons btn btn-outline-success" @click="showAddItemModal = true">add</i>
-        <i class="material-icons btn btn-outline-danger" @click="toggleDelete">clear</i>
+        <i class="material-icons btn btn-outline-success" @click="showAddItemModal = true" title="Add Items">add</i>
+        <i class="material-icons btn btn-outline-danger" @click="toggleDelete" title="Delete Items">clear</i>
         <i
           class="material-icons deleteSection btn btn-outline-dark"
           @click="showDeleteSectionModal = true"
+          title="Delete Section"
         >delete</i>
       </div>
     </div>

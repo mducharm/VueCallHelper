@@ -11,18 +11,18 @@
 
     <!-- Menu options -->
     <div class="icons-bar">
-      <i class="material-icons menu-icon btn btn-light" @click="showSettings = true">settings</i>
-      <i class="material-icons menu-icon btn btn-light" @click="showAbout = true">help_outline</i>
+      <i class="material-icons menu-icon btn btn-light" @click="showSettings = true" title="Settings">settings</i>
+      <i class="material-icons menu-icon btn btn-light" @click="showAbout = true" title="About">help_outline</i>
     </div>
     <textarea name="callLog" ref="textbox" cols="40" rows="5" id="callLog" v-model="textbox"></textarea>
     <div class="icons-bar">
-      <div class="menu-icon-with-tooltip btn btn-light" @click="handleCopyToClipboard()">
+      <div class="menu-icon-with-tooltip btn btn-light" @click="handleCopyToClipboard()" title="Copy to Clipboard">
         <i class="material-icons menu-icon-inner">file_copy</i>
         <transition name="copy-tool-tip-transition">
           <div class="btn btn-dark copy-tool-tip" v-show="copyToolTip">Copied to Clipboard</div>
         </transition>
       </div>
-      <i class="material-icons menu-icon btn btn-light" @click="$emit('clear-textbox')">settings_backup_restore</i>
+      <i class="material-icons menu-icon btn btn-light" @click="$emit('clear-textbox')" title="Clear">settings_backup_restore</i>
     </div>
 
     <!-- Settings Modal -->
@@ -38,6 +38,7 @@
               class="btn btn-light"
               @click="showOptionData = true"
               style="width: 100%;"
+              title="Lists how often each option has been used"
             >View Usage Data</button>
           </li>
           <li>
@@ -46,11 +47,12 @@
               class="btn btn-light"
               @click="$emit('export-settings')"
               style="width: 100%;"
+              title="Export settings as .json"
             >Export Settings</button>
           </li>
           <li>
             <!-- Toggle Datetime Button -->
-            <button class="btn btn-light datetime-btn" @click="handleDateTime()">
+            <button class="btn btn-light datetime-btn" @click="handleDateTime()" title="Adds date and time to textbox">
               <i v-if="datetimeTagProp" class="material-icons">check_box</i>
               <i v-else class="material-icons">check_box_outline_blank</i>
               Toggle Datetime Tag</button>
@@ -65,6 +67,7 @@
                   class="custom-file-input importInput"
                   id="importJSONinput"
                   @change="loadFile($event)"
+                  title="Import settings as .json"
                 >
                 <label class="custom-file-label" for="importJSONinput"><p class="chooseFile">Choose File</p></label>
               </div>
